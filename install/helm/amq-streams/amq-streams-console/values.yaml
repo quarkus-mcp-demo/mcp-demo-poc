@@ -1,0 +1,16 @@
+nameOverride: streams-console
+
+namespace: 
+subdomain:
+
+kafka:
+  name: 
+  namespace: 
+  authentication:
+    saslMechanism: 
+  authorization: 
+
+argocd:
+  syncwave:
+    enabled: true
+    console: "1"

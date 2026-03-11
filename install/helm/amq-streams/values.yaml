@@ -1,0 +1,25 @@
+amq-streams-operator:
+  argocd:
+    enabled: true
+    operator:
+      syncwave: "-2"
+amq-streams-console-operator:
+  argocd:
+    enabled: true
+    operator:
+      syncwave: "-2"
+kafka-broker:
+  argocd:
+    syncwave:
+      enabled: true
+      kafka: "0"
+      namespace: "-1"
+kafka-topics:
+  argocd:
+    enabled: true
+    syncwave: "1"
+amq-streams-console:
+  argocd:
+    syncwave:
+      enabled: true
+      console: "1"

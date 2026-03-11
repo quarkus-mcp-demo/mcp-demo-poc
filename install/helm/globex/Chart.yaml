@@ -1,0 +1,31 @@
+apiVersion: v2
+name: globex-ai
+description: A Helm chart for Kubernetes
+type: application
+version: 0.1.0
+
+dependencies:
+  - name: kafka-broker
+    version: 0.1.0
+    repository: file://kafka-broker
+  - name: kafka-topics
+    version: 0.1.0
+    repository: file://kafka-topics
+  - name: globex-db
+    version: 0.1.0
+    repository: file://globex-db
+  - name: globex-store-app
+    version: 0.1.0
+    repository: file://globex-store-app
+  - name: keycloak-realmimport-globex
+    version: 0.1.0
+    repository: file://keycloak-realmimport-globex
+  - name: globex-web
+    version: 0.1.0
+    repository: file://globex-web
+  - name: activity-tracking
+    version: 0.1.0
+    repository: file://activity-tracking
+  - name: recommendation-engine
+    version: 0.1.0
+    repository: file://recommendation-engine

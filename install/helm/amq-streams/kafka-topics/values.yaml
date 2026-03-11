@@ -1,0 +1,11 @@
+kafka:
+  cluster:
+  replicationFactor: 3
+  topics:
+    - name: test
+      partitions: 5
+      retention: -1
+  namespace: 
+argocd:
+  enabled: true
+  syncwave: "1"

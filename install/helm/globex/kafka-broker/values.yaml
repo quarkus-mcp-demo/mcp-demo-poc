@@ -1,0 +1,15 @@
+bootstrapServer: 
+
+namespace:
+
+authentication:
+  clientId: globex
+  clientSecret: globex
+  securityProtocol: SASL_PLAINTEXT
+  saslMechanism: SCRAM-SHA-512
+
+authorization: simple
+
+argocd:
+  enabled: true
+  syncwave: "-1"

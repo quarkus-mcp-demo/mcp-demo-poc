@@ -1,0 +1,57 @@
+namespace:
+
+keycloak:
+  name: keycloak
+
+realm:
+  name: globex
+
+hook:
+  image:
+    repository: quay.io/cloud-architecture-workshop/wait-for-statefulset-job
+    pullPolicy: IfNotPresent
+    tag: "1c68180"
+  serviceAccount:
+    create: true
+    name: ""
+  podSecurityContext:
+    runAsNonRoot: true
+    seccompProfile:
+      type: RuntimeDefault
+  securityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - ALL
+  maxTimeToWait: 120000
+
+client:
+  gateway: globex-web-gateway
+
+users:
+  users:
+    - id: asilva
+      email: asilva@email.com
+      groups: []
+    - id: mmiller
+      email: mmiller@topvibe.com
+      groups: []
+    - id: asanders
+      email: asanders@topgreatest.com
+      groups: []
+    - id: cjones
+      email: cjones@zmail.com
+      groups: []
+    - id: pwong
+      email: pwong@firstsimple.com
+      groups: [] 
+  password: openshift
+
+groups: []
+
+roles: []
+
+argocd:
+  enabled: true
+  syncwave: "-2"
+
