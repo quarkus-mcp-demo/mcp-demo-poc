@@ -4,9 +4,9 @@ fullnameOverride: ""
 replicaCount: 1
 
 image:
-  repository: registry.redhat.io/rhel8/postgresql-12
+  repository: registry.redhat.io/rhel10/postgresql-16
   pullPolicy: IfNotPresent
-  tag: "1"
+  tag: "10.1"
 
 podSecurityContext: 
   runAsNonRoot: true
