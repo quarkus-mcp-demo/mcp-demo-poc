@@ -16,13 +16,21 @@ import org.globex.ai.persistence.PostgresqlConfig;
 
 import java.sql.SQLException;
 import java.util.Map;
-import java.util.function.Function;
 
 @ApplicationScoped
 public class RoutingAgentGraphProducer {
 
     @Inject
     PostgresqlConfig postgresqlConfig;
+
+    @Inject
+    IdentifyNeedAIService  identifyNeedAIService;
+
+    @Inject
+    HandleOtherRequestAIService handleOtherRequestAIService;
+
+    @Inject
+    ClassifyIntentAIService classifyIntentAIService;
 
     @Produces
     @Identifier("routing-agent")
@@ -35,24 +43,9 @@ public class RoutingAgentGraphProducer {
     }
 
     CompiledGraph<State> compiledGraph() throws GraphStateException, SQLException {
-        AsyncNodeAction<State> greetAndIdentifyNeed = AsyncNodeAction.node_async(LlmNodeAction.get(new Function<String, String>() {
-            @Override
-            public String apply(String s) {
-                return new IdentifyNeedAIService().process(s);
-            }
-        }));
-        AsyncNodeAction<State> handleOtherRequest = AsyncNodeAction.node_async(LlmNodeAction.get(new Function<String, String>() {
-            @Override
-            public String apply(String s) {
-                return new HandleOtherRequestAIService().process(s);
-            }
-        }));
-        AsyncNodeAction<State> classifyIntent = AsyncNodeAction.node_async(LlmNodeAction.get(new Function<String, String>() {
-            @Override
-            public String apply(String s) {
-                return new ClassifyIntentAIService().process(s);
-            }
-        }, (value, state) -> {
+        AsyncNodeAction<State> greetAndIdentifyNeed = AsyncNodeAction.node_async(LlmNodeAction.get(s -> identifyNeedAIService.process(s)));
+        AsyncNodeAction<State> handleOtherRequest = AsyncNodeAction.node_async(LlmNodeAction.get(s -> handleOtherRequestAIService.process(s)));
+        AsyncNodeAction<State> classifyIntent = AsyncNodeAction.node_async(LlmNodeAction.get(s -> classifyIntentAIService.process(s), (value, state) -> {
             state.put("intent", value);
             return state;
         }));
@@ -69,7 +62,8 @@ public class RoutingAgentGraphProducer {
                 .addEdge("handle_other_request", "wait_for_input")
                 .addEdge("wait_for_input", "classify_intent")
                 .addConditionalEdges("classify_intent", handleIntent, EdgeMappings.builder()
-                        .to(GraphDefinition.END,  "ROUTE_TO_SPECIALIST")
+                        .to(GraphDefinition.END,  "LAPTOP_REFRESH")
+                        .to(GraphDefinition.END,  "EMAIL_CHANGE")
                         .to("handle_other_request", "OTHER")
                         .build());
 

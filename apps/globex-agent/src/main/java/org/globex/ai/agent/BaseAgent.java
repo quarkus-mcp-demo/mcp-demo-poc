@@ -51,9 +51,9 @@ public class BaseAgent {
         State outputState = output.state();
         Message message = outputState.lastAIMessage();
         String response = message == null ? "" : message.content();
-        Optional<String> intent = outputState.value("intent");
+        Optional<String> intentOptional = outputState.value("intent");
         String checkpointId = lastConfig == null ? null : lastConfig.checkPointId().orElse(null);
-        return intent.map(s -> new AgentResponse(response, true, s, checkpointId))
+        return intentOptional.map(intent -> new AgentResponse(response, true, intent, checkpointId))
                 .orElseGet(() -> new AgentResponse(response, false, null, checkpointId));
     }
 
