@@ -7,7 +7,7 @@ image:
   repository: quay.io/cloud-architecture-workshop/globex-store
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: ecdaba6
+  tag: 3267a35
 
 podAnnotations: {}
 
