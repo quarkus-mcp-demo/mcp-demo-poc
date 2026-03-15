@@ -23,6 +23,10 @@ public interface GlobexStoreApi {
     Customer getCustomerByUserEmail(@PathParam("email") String email);
 
     @GET
+    @Path("/customer/id/{userId}")
+    Customer getCustomerByUserId(@PathParam("userId") String userId);
+
+    @GET
     @Path("/catalog/product/{id}")
     Product getProductById(@PathParam("id") String id);
 

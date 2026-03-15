@@ -1,8 +1,10 @@
 package org.globex.mcp.store.mcp;
 
 import io.quarkiverse.mcp.server.Tool;
-import io.quarkiverse.mcp.server.ToolArg;
 import io.quarkus.logging.Log;
+import io.vertx.core.http.HttpServerRequest;
+import jakarta.inject.Inject;
+import org.apache.commons.validator.routines.EmailValidator;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.globex.mcp.store.mcp.model.LineItem;
 import org.globex.mcp.store.mcp.model.Order;
@@ -16,10 +18,25 @@ public class GlobexStoreMcp {
     @RestClient
     GlobexStoreApi globexStoreApi;
 
-    @Tool(name = "getOrderHistoryByCustomerEmail", description = "Retrieve a customer's order history based on their customer email")
-    public List<Order> getOrderHistory(@ToolArg(description = "the customer email") String customerEmail) {
-        Log.infof("getOrderHistoryByCustomerEmail Tool invoked for customer Email %s", customerEmail);
-        Customer customer = globexStoreApi.getCustomerByUserEmail(customerEmail);
+    @Inject
+    HttpServerRequest request;
+
+    @Tool(name = "getOrderHistory", description = "Retrieve a customer's order history based on their customer email")
+    public List<Order> getOrderHistory() {
+        String userId = request.getHeader("X-User-Id");
+        if (userId == null || userId.isEmpty()) {
+            Log.error("Missing X-User-Id HTTP Header");
+            throw new RuntimeException("Missing X-User-Id HTTP Header");
+        }
+        EmailValidator emailValidator = EmailValidator.getInstance();
+        Customer customer = null;
+        if (emailValidator.isValid(userId)) {
+            Log.infof("getOrderHistory Tool invoked for customer with email %s", userId);
+            customer = globexStoreApi.getCustomerByUserEmail(userId);
+        } else {
+            Log.infof("getOrderHistory Tool invoked for customer with ID %s", userId);
+            customer = globexStoreApi.getCustomerByUserId(userId);
+        }
         if (customer == null) {
             return List.of();
         }
