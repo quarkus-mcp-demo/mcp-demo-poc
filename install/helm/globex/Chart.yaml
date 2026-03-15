@@ -29,3 +29,6 @@ dependencies:
   - name: recommendation-engine
     version: 0.1.0
     repository: file://recommendation-engine
+  - name: globex-store-mcp
+    version: 0.1.0
+    repository: file://globex-store-mcp

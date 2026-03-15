@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "globex-store-mcp.name" . }}
+  labels:
+    {{- include "globex-store-mcp.labels" . | nindent 4 }}
+  annotations:
+    {{- include "globex-store-mcp.argocd-syncwave" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: {{ .Values.service.containerPort }}
+      protocol: TCP
+      name: {{ .Values.service.portName }}
+  selector:
+    {{- include "globex-store-mcp.selectorLabels" . | nindent 4 }}

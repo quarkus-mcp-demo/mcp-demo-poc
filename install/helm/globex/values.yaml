@@ -28,26 +28,6 @@ globex-store-app:
     enabled: true
     syncwave: "0"
 
-mail-mcp:
-  argocd:
-    enabled: true
-    syncwave: "-1"
-
-review-processor:
-  argocd:
-    enabled: true
-    syncwave: "1"
-
-reviews-summarizer:
-  argocd:
-    enabled: true
-    syncwave: "1"
-
-review-service:
-  argocd:
-    enabled: true
-    syncwave: "1"
-
 globex-web:
   argocd:
     enabled: true
@@ -59,6 +39,11 @@ activity-tracking:
     syncwave: "1"
 
 recommendation-engine:
+  argocd:
+    enabled: true
+    syncwave: "1"
+
+globex-store-mcp:
   argocd:
     enabled: true
     syncwave: "1"
