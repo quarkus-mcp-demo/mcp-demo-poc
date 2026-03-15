@@ -161,6 +161,12 @@ ocp4_workload_mcp_demo_poc_rhbk_client_mcp_secret:
 
 
 # ------------------------------------------------
+# Globex
+# ------------------------------------------------
+
+ocp4_workload_mcp_demo_poc_globex_store_mcp_host: globex-store-mcp
+
+# ------------------------------------------------
 # App of apps
 # ------------------------------------------------
 
