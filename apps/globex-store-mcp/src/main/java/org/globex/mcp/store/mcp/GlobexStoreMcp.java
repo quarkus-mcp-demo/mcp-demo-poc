@@ -21,7 +21,7 @@ public class GlobexStoreMcp {
     @Inject
     HttpServerRequest request;
 
-    @Tool(name = "getOrderHistory", description = "Retrieve a customer's order history based on their customer email")
+    @Tool(name = "get_order_history", description = "Retrieve a customer's order history based on their customer email")
     public List<Order> getOrderHistory() {
         String userId = request.getHeader("X-User-Id");
         if (userId == null || userId.isEmpty()) {
