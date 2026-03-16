@@ -48,6 +48,7 @@ public class GlobexStoreMcp {
                 .withOrderLineItems(o.getLineItems().stream().map(lineItem -> LineItem.builder()
                                 .withProductCode(lineItem.getProduct())
                                 .withProductName(globexStoreApi.getProductById(lineItem.getProduct()).getName())
+                                .withQuantity(lineItem.getQuantity())
                                 .build())
                         .toList())
                 .build()).toList();
