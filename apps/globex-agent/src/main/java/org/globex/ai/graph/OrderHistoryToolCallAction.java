@@ -4,11 +4,8 @@ import dev.langchain4j.agent.tool.ToolExecutionRequest;
 import dev.langchain4j.data.message.ToolExecutionResultMessage;
 import dev.langchain4j.mcp.client.McpClient;
 import dev.langchain4j.service.tool.ToolExecutionResult;
-import io.quarkiverse.langchain4j.mcp.runtime.McpClientName;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
 import org.bsc.langgraph4j.action.NodeAction;
 import org.globex.ai.model.AssistantMessage;
 
@@ -19,14 +16,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import java.util.UUID;
 
-@ApplicationScoped
 public class OrderHistoryToolCallAction {
 
-    @Inject
-    @McpClientName("globex-store")
-    McpClient client;
-
-    public NodeAction<State> get() {
+    public static NodeAction<State> get(McpClient client) {
         return state -> {
             ToolExecutionRequest toolExecutionRequest = ToolExecutionRequest.builder()
                     .id("tool-" + UUID.randomUUID())
@@ -45,7 +37,7 @@ public class OrderHistoryToolCallAction {
         };
     }
 
-    String buildResponse(String result) {
+    static String buildResponse(String result) {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("Hello! I'm here to help you file a product complaint.").append(System.lineSeparator());
         stringBuilder.append("These are your recent orders:").append(System.lineSeparator()).append(System.lineSeparator());
@@ -54,7 +46,7 @@ public class OrderHistoryToolCallAction {
         return stringBuilder.toString();
     }
 
-    String formatOrderHistory(String result) {
+    static String formatOrderHistory(String result) {
         StringBuilder stringBuilder = new StringBuilder();
         JsonObject json = new JsonObject(result);
         JsonArray jsonArray = json.getJsonArray("orders");
@@ -77,7 +69,7 @@ public class OrderHistoryToolCallAction {
         return stringBuilder.toString();
     }
 
-    String formatDateTime(Instant instant, String pattern) {
+    static String formatDateTime(Instant instant, String pattern) {
         LocalDateTime localDateTime = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
         return formatter.format(localDateTime);

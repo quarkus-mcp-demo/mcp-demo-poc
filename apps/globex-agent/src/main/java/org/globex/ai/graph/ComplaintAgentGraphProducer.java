@@ -1,5 +1,7 @@
 package org.globex.ai.graph;
 
+import dev.langchain4j.mcp.client.McpClient;
+import io.quarkiverse.langchain4j.mcp.runtime.McpClientName;
 import io.smallrye.common.annotation.Identifier;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Produces;
@@ -26,7 +28,8 @@ public class ComplaintAgentGraphProducer {
     PostgresqlConfig postgresqlConfig;
 
     @Inject
-    OrderHistoryToolCallAction orderHistoryToolCallAction;
+    @McpClientName("globex-store")
+    McpClient mcpClient;
 
     @Inject
     ProductSelectionAIService aiService;
@@ -45,7 +48,7 @@ public class ComplaintAgentGraphProducer {
     }
 
     CompiledGraph<State> compiledGraph() throws GraphStateException, SQLException {
-        AsyncNodeAction<State> lookupOrderHistory = node_async(orderHistoryToolCallAction.get());
+        AsyncNodeAction<State> lookupOrderHistory = node_async(OrderHistoryToolCallAction.get(mcpClient));
         AsyncNodeAction<State> waitForUserInput = node_async(state -> Map.of());
         AsyncNodeAction<State> productSelection = node_async(ProductSelectionNodeAction.get((input, orderHistory) -> aiService.selectProduct(input, orderHistory)));
         AsyncNodeAction<State> handleProductNotSelected = node_async(LlmNodeAction.get(s -> handleProductNotSelectedAIService.handleRequest(s)));
