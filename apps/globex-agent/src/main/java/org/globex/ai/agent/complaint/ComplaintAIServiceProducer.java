@@ -7,6 +7,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Produces;
 import jakarta.inject.Inject;
 import org.globex.ai.agent.AIServiceConfigs;
+import org.globex.ai.agent.ConversationChatMemoryProviderSupplier;
 
 import static org.globex.ai.agent.ChatRequestTransformer.overrideTemperature;
 
@@ -19,6 +20,9 @@ public class ComplaintAIServiceProducer {
 
     @Inject
     AIServiceConfigs aiServiceConfigs;
+
+    @Inject
+    ConversationChatMemoryProviderSupplier chatMemoryProviderSupplier;
 
     @Produces
     public ProductSelectionAIService provideProductSelectionAIService() {
@@ -33,6 +37,15 @@ public class ComplaintAIServiceProducer {
         return AiServices.builder(HandleProductNotSelectedAIService.class)
                 .chatModel(chatModel)
                 .chatRequestTransformer(overrideTemperature(aiServiceConfigs.aiServiceConfigs().get("product_not_selected").temperature()))
+                .build();
+    }
+
+    @Produces
+    public ComplaintAIService provideComplaintAIService() {
+        return AiServices.builder(ComplaintAIService.class)
+                .chatModel(chatModel)
+                .chatRequestTransformer(overrideTemperature(aiServiceConfigs.aiServiceConfigs().get("complaint").temperature()))
+                .chatMemoryProvider(chatMemoryProviderSupplier.get())
                 .build();
     }
 
