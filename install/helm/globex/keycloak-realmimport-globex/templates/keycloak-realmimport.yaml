@@ -419,8 +419,8 @@ spec:
         enabled: true
         totp: false
         emailVerified: true
-        firstName: '{{ $item.id }}'
-        lastName: 'rhdh'
+        firstName: '{{ $item.firstName }}'
+        lastName: '{{ $item.lastName }}'
         email: {{ $item.email }}
         credentials:
           - type: password
