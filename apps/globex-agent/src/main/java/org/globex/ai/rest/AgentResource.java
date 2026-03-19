@@ -38,11 +38,11 @@ public class AgentResource {
         }
         return Uni.createFrom().item(() -> request).emitOn(Infrastructure.getDefaultWorkerPool())
                 .onItem().transform(r -> {
-                    String userEmail = jwt.claim(Claims.email).orElse("").toString();
-                    Log.infof("Agent request received: %s; userId: %s", r, userEmail);
-                    authorativeUserIdHolder.setUserId(userEmail);
+                    String userName = jwt.claim(Claims.preferred_username).orElse("").toString();
+                    Log.infof("Agent request received: %s; userId: %s", r, userName);
+                    authorativeUserIdHolder.setUserId(userName);
                     JsonObject jsonObject = new JsonObject(r);
-                    return sessionManager.handleRequest(jsonObject.getString("request"), userEmail);
+                    return sessionManager.handleRequest(jsonObject.getString("request"), userName);
                 })
                 .onItem().transform(response -> Response.status(Response.Status.OK).entity(new JsonObject().put("response", response).encode()).build())
                 .onFailure().recoverWithItem(throwable -> {
