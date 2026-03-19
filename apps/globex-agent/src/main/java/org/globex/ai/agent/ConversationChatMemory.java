@@ -11,7 +11,7 @@ import java.util.Map;
 @Singleton
 public class ConversationChatMemory {
 
-    Map<String, ChatMemory> chatMemoryMap = new HashMap<>();
+    final Map<String, ChatMemory> chatMemoryMap = new HashMap<>();
 
     public void put(String sessionId, ChatMemory chatMemory) {
         this.chatMemoryMap.put(sessionId, chatMemory);

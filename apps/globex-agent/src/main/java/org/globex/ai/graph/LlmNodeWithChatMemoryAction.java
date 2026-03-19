@@ -10,9 +10,7 @@ import org.globex.ai.model.Message;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.function.BiFunction;
-import java.util.function.Function;
 
 public class LlmNodeWithChatMemoryAction {
 
