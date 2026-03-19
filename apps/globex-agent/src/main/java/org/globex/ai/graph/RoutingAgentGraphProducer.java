@@ -46,11 +46,27 @@ public class RoutingAgentGraphProducer {
         AsyncNodeAction<State> greetAndIdentifyNeed = AsyncNodeAction.node_async(LlmNodeAction.get(s -> identifyNeedAIService.process(s)));
         AsyncNodeAction<State> handleOtherRequest = AsyncNodeAction.node_async(LlmNodeAction.get(s -> handleOtherRequestAIService.process(s)));
         AsyncNodeAction<State> classifyIntent = AsyncNodeAction.node_async(LlmNodeAction.get(s -> classifyIntentAIService.process(s), (value, state) -> {
-            state.put("routing_target", value);
+            state.put("intent", value);
+            String routingTarget;
+            if ("PRODUCT_COMPLAINT".equals(value)) {
+                routingTarget = "complaint-agent";
+            } else if ("ORDER".equals(value)) {
+                routingTarget = "order-agent";
+            } else {
+                routingTarget = value;
+            }
+            state.put("routing_target", routingTarget);
             return state;
         }));
         AsyncNodeAction<State> waitForUserInput =AsyncNodeAction.node_async(state -> Map.of());
-        AsyncEdgeAction<State> handleIntent = AsyncEdgeAction.edge_async(state -> state.value("routing_target").orElse("OTHER").toString());
+        AsyncEdgeAction<State> handleIntent = AsyncEdgeAction.edge_async(state -> {
+            String routing = state.value("routing_target").orElse("OTHER").toString();
+            if (!routing.equals("OTHER")) {
+                return "ROUTE_TO_AGENT";
+            } else {
+                return routing;
+            }
+        });
 
         StateGraph<State> graph = new StateGraph<>(State::new)
                 .addNode("greet_and_identify_need",  greetAndIdentifyNeed)
@@ -62,8 +78,7 @@ public class RoutingAgentGraphProducer {
                 .addEdge("handle_other_request", "wait_for_input")
                 .addEdge("wait_for_input", "classify_intent")
                 .addConditionalEdges("classify_intent", handleIntent, EdgeMappings.builder()
-                        .to(GraphDefinition.END,  "PRODUCT_COMPLAINT")
-                        .to(GraphDefinition.END,  "ORDER")
+                        .to(GraphDefinition.END,  "ROUTE_TO_AGENT")
                         .to("handle_other_request", "OTHER")
                         .build());
 
