@@ -47,13 +47,11 @@ public class RoutingAgentGraphProducer {
         AsyncNodeAction<State> handleOtherRequest = AsyncNodeAction.node_async(LlmNodeAction.get(s -> handleOtherRequestAIService.process(s)));
         AsyncNodeAction<State> classifyIntent = AsyncNodeAction.node_async(LlmNodeAction.get(s -> classifyIntentAIService.process(s), (value, state) -> {
             state.put("intent", value);
-            String routingTarget;
+            String routingTarget = null;
             if ("PRODUCT_COMPLAINT".equals(value)) {
                 routingTarget = "complaint-agent";
             } else if ("ORDER".equals(value)) {
                 routingTarget = "order-agent";
-            } else {
-                routingTarget = value;
             }
             state.put("routing_target", routingTarget);
             return state;
