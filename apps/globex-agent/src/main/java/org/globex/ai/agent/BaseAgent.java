@@ -52,9 +52,9 @@ public class BaseAgent {
         State outputState = output.state();
         Message message = outputState.lastAIMessage();
         String response = message == null ? "" : message.content();
-        Optional<String> intentOptional = outputState.value("intent");
+        Optional<String> routingTarget = outputState.value("routing_target");
         String checkpointId = lastConfig == null ? null : lastConfig.checkPointId().orElse(null);
-        return intentOptional.map(intent -> new AgentResponse(response, true, intent, checkpointId))
+        return routingTarget.map(target -> new AgentResponse(response, true, target, checkpointId))
                 .orElseGet(() -> new AgentResponse(response, false, null, checkpointId));
     }
 

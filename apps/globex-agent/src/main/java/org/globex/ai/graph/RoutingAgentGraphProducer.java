@@ -46,11 +46,11 @@ public class RoutingAgentGraphProducer {
         AsyncNodeAction<State> greetAndIdentifyNeed = AsyncNodeAction.node_async(LlmNodeAction.get(s -> identifyNeedAIService.process(s)));
         AsyncNodeAction<State> handleOtherRequest = AsyncNodeAction.node_async(LlmNodeAction.get(s -> handleOtherRequestAIService.process(s)));
         AsyncNodeAction<State> classifyIntent = AsyncNodeAction.node_async(LlmNodeAction.get(s -> classifyIntentAIService.process(s), (value, state) -> {
-            state.put("intent", value);
+            state.put("routing_target", value);
             return state;
         }));
         AsyncNodeAction<State> waitForUserInput =AsyncNodeAction.node_async(state -> Map.of());
-        AsyncEdgeAction<State> handleIntent = AsyncEdgeAction.edge_async(state -> state.value("intent").orElse("OTHER").toString());
+        AsyncEdgeAction<State> handleIntent = AsyncEdgeAction.edge_async(state -> state.value("routing_target").orElse("OTHER").toString());
 
         StateGraph<State> graph = new StateGraph<>(State::new)
                 .addNode("greet_and_identify_need",  greetAndIdentifyNeed)
