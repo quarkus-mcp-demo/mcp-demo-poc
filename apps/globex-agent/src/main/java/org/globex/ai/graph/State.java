@@ -70,6 +70,12 @@ public class State extends AgentState {
         return State.updateState(this, Map.of("tool_execution_results", serializedMessages), null);
     }
 
+    public Map<String, Object> addToolExecutionResultMessage(ToolExecutionResultMessage message, Map<String, Object> newState) {
+        List<String> serializedMessages = (List<String>) value("tool_execution_results").orElse(new ArrayList<>());
+        serializedMessages.add(toolExecutionResultMessageToJson(message));
+        return State.updateState(newState, Map.of("tool_execution_results", serializedMessages), null);
+    }
+
     public ToolExecutionResultMessage lastToolExecutionResultMessage() {
         if (toolExecutionResultMessages().isEmpty()) {
             return null;
