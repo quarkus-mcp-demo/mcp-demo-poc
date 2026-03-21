@@ -129,6 +129,20 @@ globex:
           kafka:
             <<: *kafkacluster
 
+        globex-agent:
+          oidc:
+            realm: globex
+            clientId: globex-web-gateway
+          mcp:
+            globexStore:
+              url: http://globex-store-mcp:8080/mcp
+              logRequests: true
+              logResponses: true
+            complaints:
+              url: http://globex-complaints/mcp
+              logRequests: true
+              logResponses: true
+
   argocd:
     enabled: true
     syncwave: "2"

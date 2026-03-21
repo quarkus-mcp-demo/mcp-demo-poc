@@ -35,3 +35,6 @@ dependencies:
   - name: globex-complaints
     version: 0.1.0
     repository: file://globex-complaints
+  - name: globex-agent
+    version: 0.1.0
+    repository: file://globex-agent
