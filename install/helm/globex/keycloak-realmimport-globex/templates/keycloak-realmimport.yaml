@@ -1212,27 +1212,6 @@ spec:
               access.token.claim: 'true'
               claim.name: email_verified
               jsonType.label: boolean
-      - id: {{ uuidv4 }}
-        name: mcp-audience
-        description: ''
-        protocol: openid-connect
-        attributes:
-          include.in.token.scope: 'false'
-          display.on.consent.screen: 'true'
-          gui.order: ''
-          consent.screen.text: ''
-        protocolMappers:
-        - id: {{ uuidv4 }}
-          name: mcp-as-audience
-          protocol: openid-connect
-          protocolMapper: oidc-audience-mapper
-          consentRequired: false
-          config:
-            id.token.claim: 'false'
-            lightweight.claim: 'false'
-            access.token.claim: 'true'
-            introspection.token.claim: 'true'
-            included.custom.audience: mcp
     defaultDefaultClientScopes:
       - role_list
       - profile
@@ -1245,7 +1224,6 @@ spec:
       - address
       - phone
       - microprofile-jwt
-      - mcp-audience
     browserSecurityHeaders:
       contentSecurityPolicyReportOnly: ''
       xContentTypeOptions: nosniff
