@@ -140,7 +140,7 @@ globex:
               logRequests: true
               logResponses: true
             complaints:
-              url: http://globex-complaints/mcp
+              url: http://globex-complaints:8080/mcp
               logRequests: true
               logResponses: true
 
