@@ -53,7 +53,7 @@ globex-complaints:
     enabled: true
     syncwave: "1"
 
-globex-agents:
+globex-agent:
   argocd:
     enabled: true
     syncwave: "2"
