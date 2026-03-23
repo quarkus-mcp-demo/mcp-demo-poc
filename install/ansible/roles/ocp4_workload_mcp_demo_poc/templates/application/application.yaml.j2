@@ -66,4 +66,29 @@ spec:
                 globex-complaints:
                   route:
                     host: {{ ocp4_workload_mcp_demo_poc_globex_complaints_host }}.{{ r_openshift_subdomain }}
+                globex-agent:
+                  llm:
+                    routing:
+                      modelName: {{  ocp4_workload_mcp_demo_poc_routing_llm_model_name }}
+                      apiKey: {{ ocp4_workload_mcp_demo_poc_routing_llm_api_key }}
+                      baseUrl: {{ ocp4_workload_mcp_demo_poc_routing_llm_base_url }}
+                    complaint:
+                      modelName: {{ ocp4_workload_mcp_demo_poc_complaint_llm_model_name }} 
+                      apiKey: {{ ocp4_workload_mcp_demo_poc_complaint_llm_api_key }}
+                      baseUrl: {{ ocp4_workload_mcp_demo_poc_complaint_llm_base_url }}
+                    order:
+                      modelName: {{ ocp4_workload_mcp_demo_poc_order_llm_model_name }}
+                      apiKey: {{ ocp4_workload_mcp_demo_poc_order_llm_api_key }}
+                      baseUrl: {{ ocp4_workload_mcp_demo_poc_order_llm_base_url }}
+                  cors:
+                    enabled: true
+                  oidc:
+                    authServerUrl: https://{{ ocp4_workload_mcp_demo_poc_rhbk_host }}.{{ r_openshift_subdomain }}
+                    clientSecret: {{ ocp4_workload_mcp_demo_poc_rhbk_client_gateway_secret }}
+                  route:
+                    host: {{ ocp4_workload_mcp_demo_poc_globex_agent_host }}.{{ r_openshift_subdomain }}
+                keycloak-realmimport-globex:
+                  client:
+                    gateway: 
+                      secret: {{ ocp4_workload_mcp_demo_poc_rhbk_client_gateway_secret }}
 

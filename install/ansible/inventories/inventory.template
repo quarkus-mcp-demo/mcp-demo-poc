@@ -1,1 +1,16 @@
 [all:vars]
+
+# routing
+routing_llm_api_key=
+routing_llm_model_name=
+routing_llm_base_url=
+
+# complaint
+complaint_llm_api_key=
+complaint_llm_model_name=
+complaint_llm_base_url=
+
+# order
+order_llm_api_key=
+order_llm_model_name=
+order_llm_base_url=

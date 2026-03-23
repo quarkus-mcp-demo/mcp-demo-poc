@@ -156,8 +156,8 @@ ocp4_workload_mcp_demo_poc_openshift_ingress_secret_certs: ingress-certs
 
 ocp4_workload_mcp_demo_poc_rhbk_host: sso
 
-ocp4_workload_mcp_demo_poc_rhbk_client_mcp_secret:
-  "{{ lookup('ansible.builtin.password', '/tmp/passwordfile-client-mcp', chars=['ascii_letters', 'digits'], length=32) }}"
+ocp4_workload_mcp_demo_poc_rhbk_client_gateway_secret:
+  "{{ lookup('ansible.builtin.password', '/tmp/passwordfile-client-gateway', chars=['ascii_letters', 'digits'], length=32) }}"
 
 
 # ------------------------------------------------
@@ -166,6 +166,19 @@ ocp4_workload_mcp_demo_poc_rhbk_client_mcp_secret:
 
 ocp4_workload_mcp_demo_poc_globex_store_mcp_host: globex-store-mcp
 ocp4_workload_mcp_demo_poc_globex_complaints_host: globex-complaints
+ocp4_workload_mcp_demo_poc_globex_agent_host: globex-agent
+
+ocp4_workload_mcp_demo_poc_routing_llm_model_name: "{{ routing_llm_model_name }}"
+ocp4_workload_mcp_demo_poc_routing_llm_api_key: "{{ routing_llm_api_key }}"
+ocp4_workload_mcp_demo_poc_routing_llm_base_url: "{{ routing_llm_base_url }}"
+
+ocp4_workload_mcp_demo_poc_complaint_llm_model_name: "{{ complaint_llm_model_name }}"
+ocp4_workload_mcp_demo_poc_complaint_llm_api_key: "{{ complaint_llm_api_key }}"
+ocp4_workload_mcp_demo_poc_complaint_llm_base_url: "{{ complaint_llm_base_url }}"
+
+ocp4_workload_mcp_demo_poc_order_llm_model_name: "{{ order_llm_model_name }}"
+ocp4_workload_mcp_demo_poc_order_llm_api_key: "{{ order_llm_api_key }}"
+ocp4_workload_mcp_demo_poc_order_llm_base_url: "{{ order_llm_base_url }}"
 
 # ------------------------------------------------
 # App of apps
