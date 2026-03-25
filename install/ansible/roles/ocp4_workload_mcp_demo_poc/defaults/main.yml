@@ -193,6 +193,6 @@ ocp4_workload_mcp_demo_poc_app_gitops_repo: https://github.com/btison/mcp-demo-p
 ocp4_workload_mcp_demo_poc_app_gitops_repo_tag: main
 ocp4_workload_mcp_demo_poc_app_gitops_repo_path: install/helm/app-of-apps
 
-
+ocp4_workload_mcp_demo_poc_app_gitops_minio_root_user: minio
 ocp4_workload_mcp_demo_poc_app_gitops_minio_secret:
   "{{ lookup('ansible.builtin.password', '/tmp/passwordfile-minio', chars=['ascii_letters', 'digits'], length=16) }}"

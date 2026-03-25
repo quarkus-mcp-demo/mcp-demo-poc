@@ -97,7 +97,7 @@ spec:
             helm:
               values:
                 minio:
-                  rootUser: minio
+                  rootUser: {{ ocp4_workload_mcp_demo_poc_app_gitops_minio_root_user }}
                   rootPassword: {{ ocp4_workload_mcp_demo_poc_app_gitops_minio_secret }}
                   securityContext:
                     enabled: false
@@ -113,6 +113,6 @@ spec:
                       - grafana-lgtm.{{ r_openshift_subdomain }}
                 mimir:
                   minio:
-                    rootUser: minio
+                    rootUser: {{ ocp4_workload_mcp_demo_poc_app_gitops_minio_root_user }}
                     rootPassword: {{ ocp4_workload_mcp_demo_poc_app_gitops_minio_secret }}
 
