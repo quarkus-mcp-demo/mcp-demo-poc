@@ -29,6 +29,15 @@ minio:
     - name: tempo-traces
       policy: none
       purge: false
+    - name: loki-chunks
+      policy: none
+      purge: false
+    - name: loki-ruler
+      policy: none
+      purge: false
+    - name: loki-admin
+      policy: none
+      purge: false
   postJob:
     annotations:
       argocd.argoproj.io/sync-wave: "1"

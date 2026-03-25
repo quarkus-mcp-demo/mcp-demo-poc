@@ -186,6 +186,13 @@ lgtm:
           minio:
             rootUser: 
             rootPassword:
+        loki:
+          loki:
+            storage:
+              type: s3
+              s3:
+                access_key_id: 
+                secret_access_key: 
 
   argocd:
     enabled: true

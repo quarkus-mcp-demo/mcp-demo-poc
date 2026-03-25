@@ -100,8 +100,16 @@ loki:
       # Default is 4, if you have enough memory and CPU you can increase, reduce if OOMing
       max_concurrent: 1
     storage:
-      type: filesystem
-
+      type: s3
+      s3:
+        endpoint: minio.lgtm.svc:9000
+        access_key_id: 
+        secret_access_key: 
+        insecure: true
+      bucketNames:
+        chunks: loki-chuncks
+        ruler: loki-ruler
+        admin: loki-admin
   singleBinary:
     affinity: 
       podAntiAffinity:
