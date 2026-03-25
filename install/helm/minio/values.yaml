@@ -26,6 +26,9 @@ minio:
     - name: mimir-ruler
       policy: none
       purge: false
+    - name: tempo-traces
+      policy: none
+      purge: false
   postJob:
     annotations:
       argocd.argoproj.io/sync-wave: "1"

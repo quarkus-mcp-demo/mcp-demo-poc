@@ -163,7 +163,16 @@ tempo:
       capabilities:
         drop:
         - ALL
-      readOnlyRootFilesystem: false    
+      readOnlyRootFilesystem: false
+    storage:
+      trace:
+        backend: s3
+        s3:
+          bucket: tempo-traces
+          endpoint: minio.lgtm.svc:9000
+          insecure: true
+          access_key:
+          secret_key:
   securityContext:
     fsGroup: null
     runAsGroup: null

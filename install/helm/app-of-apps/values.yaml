@@ -174,7 +174,19 @@ lgtm:
       values:
         grafana:
           route:
-            host: 
+            host:
+        tempo:
+          tempo:
+            storage:
+              trace:
+                s3:
+                  access_key:
+                  secret_key:
+        mimir:
+          minio:
+            rootUser: 
+            rootPassword:
+
   argocd:
     enabled: true
     syncwave: "2"
@@ -189,7 +201,12 @@ minio:
     targetRevision: main
     path: install/helm/minio
     helm:
-      values: {}
+      values:
+        minio:
+          rootUser:
+          rootPassword: 
+          securityContext:
+            enabled: false
   argocd:
     enabled: true
     syncwave: "1"
