@@ -115,4 +115,11 @@ spec:
                   minio:
                     rootUser: {{ ocp4_workload_mcp_demo_poc_app_gitops_minio_root_user }}
                     rootPassword: {{ ocp4_workload_mcp_demo_poc_app_gitops_minio_secret }}
+                tempo:
+                  tempo:
+                    storage:
+                      trace:
+                        s3:
+                          access_key: {{ ocp4_workload_mcp_demo_poc_app_gitops_minio_root_user }}
+                          secret_key: {{ ocp4_workload_mcp_demo_poc_app_gitops_minio_secret }}
 
