@@ -30,16 +30,11 @@ grafana:
           type: loki
           url: http://loki:3100
           isDefault: false
-        - name: Mimir
-          uid: prom
-          type: prometheus
-          url: http://mimir-monolithic:8080/prometheus
-          isDefault: true
         - name: Prometheus
           uid: prometheus
           type: prometheus
           url: http://prometheus-server:9090
-          isDefault: false
+          isDefault: true
         - name: Tempo
           uid: tempo
           type: tempo
@@ -197,69 +192,6 @@ tempo:
     - name: storage
       emptyDir: {}
 
-mimir:
-  enabled: true
-  deploymentMode: monolithic
-
-  fullnameOverride: mimir
-  nameOverride: mimir
-
-  kafka:
-    enabled: false
-
-  mimir:
-    structuredConfig:
-      limits:
-        # Delete from storage metrics data older than 62 days.
-        compactor_blocks_retention_period: 62d
-      ingest_storage:
-        enabled: false
-        kafka:
-          address: null
-          topic: null
-          auto_create_topic_default_partitions: null
-      distributor:
-        remote_timeout: null
-      ingester:
-        push_grpc_method_enabled: true
-      multitenancy_enabled: false
-
-  monolithic:
-    replicas: 1
-    image:
-      repository: docker.io/grafana/mimir
-      tag: r354-d48a2220
-    persistentVolume:
-      enabled: true
-      size: "8Gi"
-    zoneAwareReplication:
-      enabled: false
-    compression:
-      enabled: true
-    podSecurityContext:
-      fsGroup: null
-      runAsGroup: null
-      runAsNonRoot: true
-      runAsUser: null
-      seccompProfile:
-        type: RuntimeDefault
-    topologySpreadConstraints: null
-
-  minio:
-    enabled: true
-    name: minio
-    service:
-      port: 9000
-    rootUser: minio
-    rootPassword: ""
-
-  alertmanager:
-    enabled: false
-    fallbackConfig: null
-
-  rollout_operator:
-    enabled: false
-
 opentelemetry-collector:
   enabled: true
   nameOverride: otel
@@ -298,14 +230,6 @@ opentelemetry-collector:
         tls:
           insecure: true
 
-      # Export metrics to Mimir (LGTM stack) via nginx gateway with OTLP
-      otlphttp/mimir:
-        endpoint: http://mimir-monolithic:8080/otlp
-        headers:
-          X-Scope-OrgID: "anonymous"
-        tls:
-          insecure: true
-
       # Export traces to Tempo (LGTM stack)
       otlp/tempo:
         endpoint: "tempo:4317"
@@ -325,9 +249,6 @@ opentelemetry-collector:
         logs:
           receivers: [otlp]
           exporters: [otlphttp/loki]
-        metrics:
-          receivers: [otlp]
-          exporters: [otlphttp/mimir]
         traces:
           receivers: [otlp]
           exporters: [otlp/tempo]

@@ -1,5 +1,0 @@
-{{- if eq .Values.deploymentMode "microservices" }}
-{{- if .Values.overrides_exporter.enabled -}}
-{{- include "mimir.lib.podDisruptionBudget" (dict "ctx" $ "component" "overrides-exporter") }}
-{{- end -}}
-{{- end }}

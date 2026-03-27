@@ -1,3 +1,0 @@
-{{- if eq .Values.deploymentMode "monolithic" }}
-{{- include "mimir.lib.serviceMonitor" (dict "ctx" $ "component" "monolithic" "memberlist" true) }}
-{{- end }}

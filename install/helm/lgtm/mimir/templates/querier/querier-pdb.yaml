@@ -1,5 +1,0 @@
-{{- if eq .Values.deploymentMode "microservices" }}
-{{- if .Values.querier.enabled }}
-{{- include "mimir.lib.podDisruptionBudget" (dict "ctx" $ "component" "querier" "memberlist" true) }}
-{{- end }}
-{{- end }}
