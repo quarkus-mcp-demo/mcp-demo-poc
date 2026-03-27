@@ -411,3 +411,21 @@ prometheus:
 
     # Minimal scrape configs - will scrape itself
     extraScrapeConfigs: ""
+  # Disable default Kubernetes scrape configs
+  # Override the entire serverFiles to exclude kubernetes-apiservers and other k8s jobs
+  serverFiles:
+    prometheus.yml:
+      rule_files:
+        - /etc/config/recording_rules.yml
+        - /etc/config/alerting_rules.yml
+        - /etc/config/rules
+        - /etc/config/alerts
+      scrape_configs:
+        - job_name: prometheus
+          static_configs:
+            - targets:
+                - localhost:9090
+    alerting_rules.yml: {}
+    recording_rules.yml: {}
+    alerts: {}
+    rules: {}
