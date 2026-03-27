@@ -30,3 +30,8 @@ dependencies:
     name: opentelemetry-collector
     repository: https://open-telemetry.github.io/opentelemetry-helm-charts
     version: 0.142.2
+  - alias: prometheus
+    condition: prometheus.enabled
+    name: prometheus
+    repository: https://prometheus-community.github.io/helm-charts
+    version: 25.30.1
