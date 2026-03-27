@@ -106,6 +106,7 @@ loki:
         access_key_id: 
         secret_access_key: 
         insecure: true
+        s3forcepathstyle: true
       bucketNames:
         chunks: loki-chuncks
         ruler: loki-ruler
