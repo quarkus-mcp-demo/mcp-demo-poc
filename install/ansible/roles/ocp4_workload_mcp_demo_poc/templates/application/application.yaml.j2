@@ -128,4 +128,9 @@ spec:
                       s3:
                         access_key_id: {{ ocp4_workload_mcp_demo_poc_app_gitops_minio_root_user }}
                         secret_access_key: {{ ocp4_workload_mcp_demo_poc_app_gitops_minio_secret }}
+                prometheus:
+                  server:
+                    ingress:
+                      hosts:
+                        - prometheus-lgtm.{{ r_openshift_subdomain }}
 
