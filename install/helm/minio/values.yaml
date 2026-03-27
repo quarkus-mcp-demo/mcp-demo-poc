@@ -20,12 +20,6 @@ minio:
       memory: 128Mi
   users: []
   buckets:
-    - name: mimir-tsdb
-      policy: none
-      purge: false
-    - name: mimir-ruler
-      policy: none
-      purge: false
     - name: tempo-traces
       policy: none
       purge: false
