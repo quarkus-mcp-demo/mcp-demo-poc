@@ -23,13 +23,13 @@ minio:
     - name: tempo-traces
       policy: none
       purge: false
-    - name: loki-chunks
+    - name: chunks
       policy: none
       purge: false
-    - name: loki-ruler
+    - name: ruler
       policy: none
       purge: false
-    - name: loki-admin
+    - name: admin
       policy: none
       purge: false
   postJob:

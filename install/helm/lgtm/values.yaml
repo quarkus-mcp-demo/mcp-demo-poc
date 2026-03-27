@@ -107,10 +107,11 @@ loki:
         secret_access_key: 
         insecure: true
         s3forcepathstyle: true
+        bucketnames: chunks
       bucketNames:
-        chunks: loki-chuncks
-        ruler: loki-ruler
-        admin: loki-admin
+        chunks: chunks
+        ruler: ruler
+        admin: admin
   singleBinary:
     affinity: 
       podAntiAffinity:
