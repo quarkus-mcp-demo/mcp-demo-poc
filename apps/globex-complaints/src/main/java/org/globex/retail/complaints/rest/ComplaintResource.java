@@ -12,7 +12,10 @@ import org.globex.retail.complaints.model.CreateComplaintRequest;
 import org.globex.retail.complaints.model.UpdateComplaintRequest;
 import org.globex.retail.complaints.service.ComplaintService;
 
+import java.time.LocalDate;
 import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -107,15 +110,15 @@ public class ComplaintResource {
     @Path("/product/{productCode}")
     public Uni<Response> getComplaintsByProduct(
             @PathParam("productCode") String productCode,
-            @QueryParam("startTime") String startTime,
-            @QueryParam("endTime") String endTime,
+            @QueryParam("startDate") String startDate,
+            @QueryParam("endDate") String endDate,
             @QueryParam("sortBySeverity") @DefaultValue("true") boolean sortBySeverity,
             @QueryParam("page") Integer page,
             @QueryParam("pageSize") Integer pageSize) {
 
-        if ((startTime != null && endTime == null) || (startTime == null && endTime != null)) {
+        if ((startDate != null && endDate == null) || (startDate == null && endDate != null)) {
             return Uni.createFrom().item(Response.status(Response.Status.BAD_REQUEST)
-                    .entity("{\"error\": \"Both startTime and endTime must be provided together\"}")
+                    .entity("{\"error\": \"Both startDate and endDate must be provided together\"}")
                     .build());
         }
 
@@ -129,9 +132,12 @@ public class ComplaintResource {
                 .emitOn(Infrastructure.getDefaultWorkerPool())
                 .onItem().transform(code -> {
                     List<ComplaintDto> complaints;
-                    if (startTime != null) {
-                        OffsetDateTime start = OffsetDateTime.parse(startTime);
-                        OffsetDateTime end = OffsetDateTime.parse(endTime);
+                    if (startDate != null) {
+                        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                        LocalDate startLocalDate = LocalDate.parse(startDate, dateFormatter);
+                        LocalDate endLocalDate = LocalDate.parse(endDate, dateFormatter);
+                        OffsetDateTime start = startLocalDate.atStartOfDay().atOffset(ZoneOffset.UTC);
+                        OffsetDateTime end = endLocalDate.plusDays(1).atStartOfDay().atOffset(ZoneOffset.UTC);
                         complaints = complaintService.findByProductCodeAndTimeRange(code, start, end, sortBySeverity, page, pageSize);
                     } else {
                         complaints = complaintService.findByProductCode(code);
