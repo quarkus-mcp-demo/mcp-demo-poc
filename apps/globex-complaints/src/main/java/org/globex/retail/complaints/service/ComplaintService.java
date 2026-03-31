@@ -7,6 +7,7 @@ import org.globex.retail.complaints.model.CreateComplaintRequest;
 import org.globex.retail.complaints.model.UpdateComplaintRequest;
 import org.globex.retail.complaints.persistence.Complaint;
 
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -65,6 +66,14 @@ public class ComplaintService {
     @Transactional
     public List<ComplaintDto> findByProductCode(String productCode) {
         return Complaint.list("productCode", productCode).stream().map(complaint -> ComplaintDto.from((Complaint) complaint)).collect(Collectors.toList());
+    }
+
+    @Transactional
+    public List<ComplaintDto> findByProductCodeAndTimeRange(String productCode, OffsetDateTime startTime, OffsetDateTime endTime) {
+        return Complaint.findByProductCodeAndTimeRange(productCode, startTime, endTime)
+                .stream()
+                .map(ComplaintDto::from)
+                .collect(Collectors.toList());
     }
 
     @Transactional
