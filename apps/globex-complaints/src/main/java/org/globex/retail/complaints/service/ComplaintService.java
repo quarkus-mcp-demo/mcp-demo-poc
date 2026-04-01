@@ -7,9 +7,9 @@ import org.globex.retail.complaints.model.CreateComplaintRequest;
 import org.globex.retail.complaints.model.UpdateComplaintRequest;
 import org.globex.retail.complaints.persistence.Complaint;
 
+import java.sql.*;
 import java.time.OffsetDateTime;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @ApplicationScoped
