@@ -1,10 +1,10 @@
 replicaCount: 1
 
 image:
-  repository: quay.io/cloud-architecture-workshop/globex-web
-  pullPolicy: IfNotPresent
+  repository: quay.io/cloud-architecture-workshop/globex-web-chat
+  pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
-  tag: 0250d6f
+  tag: mcp
 
 serviceAccount:
   create: true
