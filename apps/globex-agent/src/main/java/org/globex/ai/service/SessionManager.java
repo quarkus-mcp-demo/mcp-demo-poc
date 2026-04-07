@@ -42,7 +42,7 @@ public class SessionManager {
                 session.setAgent(agentManager.getAgent(response.routingTarget()));
                 session.setThreadId(UUID.randomUUID().toString());
                 updateSessionInDatabase(session);
-                return handleRequest("", userId);
+                return handleRequest(response.userRequest(), userId);
             }
         }
         updateSessionInDatabase(session);

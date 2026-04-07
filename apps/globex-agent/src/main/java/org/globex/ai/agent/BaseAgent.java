@@ -51,11 +51,13 @@ public class BaseAgent {
 
         State outputState = output.state();
         Message message = outputState.lastAIMessage();
+        Message humanMessage = outputState.lastHumanMessage();
         String response = message == null ? "" : message.content();
+        String userRequest = humanMessage == null? "" : humanMessage.content();
         Optional<String> routingTarget = outputState.value("routing_target");
         String checkpointId = lastConfig == null ? null : lastConfig.checkPointId().orElse(null);
-        return routingTarget.map(target -> new AgentResponse(response, true, target, checkpointId))
-                .orElseGet(() -> new AgentResponse(response, false, null, checkpointId));
+        return routingTarget.map(target -> new AgentResponse(response, userRequest, true, target, checkpointId))
+                .orElseGet(() -> new AgentResponse(response, userRequest, false, null, checkpointId));
     }
 
     private NodeOutput<State> executeGraphAndFetchLastState(CompiledGraph<State> graph, RunnableConfig config, Map<String, Object> input ) {
