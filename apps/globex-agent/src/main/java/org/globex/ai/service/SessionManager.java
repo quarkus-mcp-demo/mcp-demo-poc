@@ -103,7 +103,7 @@ public class SessionManager {
         findRequestSessionBySessionId.setParameter("userId", userId);
         List requestSessions = findRequestSessionBySessionId.getResultList();
         if (requestSessions.isEmpty()) {
-            Log.warnf("No response session found for userId: %s", userId);
+            Log.infof("No response session found for userId: %s", userId);
             return null;
         }
         return (RequestSession)requestSessions.getFirst();
