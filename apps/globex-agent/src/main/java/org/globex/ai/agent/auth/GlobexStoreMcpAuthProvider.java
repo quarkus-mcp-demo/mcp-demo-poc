@@ -1,4 +1,4 @@
-package org.globex.ai.agent;
+package org.globex.ai.agent.auth;
 
 import io.quarkiverse.langchain4j.mcp.auth.McpClientAuthProvider;
 import io.quarkiverse.langchain4j.mcp.runtime.McpClientName;
@@ -10,10 +10,10 @@ import jakarta.inject.Inject;
 import org.jboss.logging.Logger;
 
 @ApplicationScoped
-@McpClientName("complaints")
-public class ComplaintsMcpAuthProvider implements McpClientAuthProvider {
+@McpClientName("globex-store")
+public class GlobexStoreMcpAuthProvider implements McpClientAuthProvider {
 
-    private static final Logger LOG = Logger.getLogger(ComplaintsMcpAuthProvider.class);
+    private static final Logger LOG = Logger.getLogger(GlobexStoreMcpAuthProvider.class);
 
     @Inject
     OidcClients oidcClients;
@@ -21,12 +21,12 @@ public class ComplaintsMcpAuthProvider implements McpClientAuthProvider {
     @Override
     public String getAuthorization(Input input) {
         try {
-            OidcClient oidcClient = oidcClients.getClient("complaints");
+            OidcClient oidcClient = oidcClients.getClient("globex-store");
             Tokens tokens = oidcClient.getTokens().await().indefinitely();
-            LOG.debug("Retrieved Bearer token for complaints MCP server");
+            LOG.debug("Retrieved Bearer token for globex-store MCP server");
             return "Bearer " + tokens.getAccessToken();
         } catch (Exception e) {
-            LOG.error("Failed to get OIDC token for complaints MCP server", e);
+            LOG.error("Failed to get OIDC token for globex-store MCP server", e);
             return null;
         }
     }
