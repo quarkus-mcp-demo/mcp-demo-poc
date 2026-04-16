@@ -14,7 +14,7 @@ import org.jboss.logging.Logger;
 
 
 
-
+@McpClientName("complaints")
 @ApplicationScoped
 public class ComplaintsMcpAuthProvider implements McpClientAuthProvider {
 
