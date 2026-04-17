@@ -63,6 +63,10 @@ spec:
             {{- toYaml . | nindent 12 }}
           {{- end }}
           env:
+            - name: KEYCLOAK_URL
+              value: {{ .Values.internalOidc.authServerUrl }}
+            - name: KEYCLOAK_REALM
+              value: {{ .Values.internalOidc.realm }}
             - name: POSTGRESQL_HOST
               value: {{ .Values.globexDb.name }}
             - name: POSTGRESQL_PORT

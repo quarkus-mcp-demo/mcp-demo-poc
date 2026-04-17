@@ -39,6 +39,16 @@ spec:
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           env:
+            - name: KEYCLOAK_URL
+              value: {{ .Values.internalOidc.authServerUrl }}
+            - name: KEYCLOAK_REALM
+              value: {{ .Values.internalOidc.realm }}
+            - name: GLOBEX_STORE_APP_AUDIENCE
+              value: {{ .Values.internalOidc.audience }}
+            - name: GLOBEX_STORE_APP_CLIENT_ID
+              value: {{ .Values.internalOidc.clientId }}
+            - name: GLOBEX_STORE_APP_TENANT_PATH
+              value: {{ .Values.internalOidc.tenantPath }}
             - name: QUARKUS_DATASOURCE_USERNAME
               valueFrom:
                 secretKeyRef:

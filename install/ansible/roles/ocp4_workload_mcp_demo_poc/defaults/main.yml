@@ -180,6 +180,43 @@ ocp4_workload_mcp_demo_poc_order_llm_model_name: "{{ order_llm_model_name }}"
 ocp4_workload_mcp_demo_poc_order_llm_api_key: "{{ order_llm_api_key }}"
 ocp4_workload_mcp_demo_poc_order_llm_base_url: "{{ order_llm_base_url }}"
 
+
+# ------------------------------------------------
+# Globex Agent OIDC Setup to call MCP and Complaints service:
+# ------------------------------------------------
+ocp_workload_mcp_demo_internal_oidc_realm: internal
+ocp_workload_mcp_demo_agent_oidc_complaints_client_id: globex-agent-complaints-client
+ocp_workload_mcp_demo_agent_oidc_complaints_client_secret:
+  "{{ lookup('ansible.builtin.password', '/tmp/passwordfile-complaints-client-secret', chars=['ascii_letters', 'digits'], length=16) }}"
+
+ocp_workload_mcp_demo_agent_oidc_globex_store_client_id: quarkus-mcp-client
+ocp_workload_mcp_demo_agent_oidc_globex_store_client_secret:
+  "{{ lookup('ansible.builtin.password', '/tmp/passwordfile-globex-store-client-secret', chars=['ascii_letters', 'digits'], length=16) }}"
+
+
+
+# ------------------------------------------------
+# globex-store-mcp OIDC configuration:
+# ------------------------------------------------
+ocp_workload_mcp_demo_globex_store_mcp_client_id: quarkus-mcp-server
+ocp_workload_mcp_demo_globex_store_mcp_audience: quarkus-mcp-server
+ocp_workload_mcp_demo_globex_store_mcp_client_secret:
+  "{{ lookup('ansible.builtin.password', '/tmp/passwordfile-globex-mcp-store-client-secret', chars=['ascii_letters', 'digits'], length=16) }}"
+
+ocp_workload_mcp_demo_agent_globex_store_app_client_id: quarkus-mcp-server
+ocp_workload_mcp_demo_globex_store_app_scope: quarkus-mcp-service-scope
+ocp_workload_mcp_demo_agent_oidc_globex_store_app_client_secret:
+  "{{ lookup('ansible.builtin.password', '/tmp/passwordfile-globex-store-app-client-secret', chars=['ascii_letters', 'digits'], length=16) }}"
+
+
+# ------------------------------------------------
+# globex-store-app OIDC configuration:
+# ------------------------------------------------
+ocp_workload_mcp_demo_globex_store_app_oidc_client_id: quarkus-mcp-server
+ocp_workload_mcp_demo_globex_store_app_oidc_audience: quarkus-mcp-service
+
+
+
 # ------------------------------------------------
 # App of apps
 # ------------------------------------------------
