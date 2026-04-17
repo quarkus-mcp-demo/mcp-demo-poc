@@ -227,7 +227,7 @@ ocp4_workload_mcp_demo_poc_app_application_namespace: openshift-gitops
 ocp4_workload_mcp_demo_poc_app_namespace: openshift-gitops
 
 ocp4_workload_mcp_demo_poc_app_gitops_repo: https://github.com/quarkus-mcp-demo/mcp-demo-poc.git
-ocp4_workload_mcp_demo_poc_app_gitops_repo_tag: main
+ocp4_workload_mcp_demo_poc_app_gitops_repo_tag: oidc-0.1
 ocp4_workload_mcp_demo_poc_app_gitops_repo_path: install/helm/app-of-apps
 
 ocp4_workload_mcp_demo_poc_app_gitops_minio_root_user: minio
