@@ -120,7 +120,7 @@ oidc:
     complaints:
       clientId:
       clientSecret:
-    globexStoreMcp:
+    globexStore:
       clientId:
       clientSecret:
 
