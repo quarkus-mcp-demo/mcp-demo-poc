@@ -20,6 +20,7 @@ spec:
   realm:
     id: {{ $.Values.realm.name }}
     realm: {{ $.Values.realm.name }}
+    displayName: {{ $.Values.realm.name }}
     notBefore: 0
     defaultSignatureAlgorithm: RS256
     revokeRefreshToken: false

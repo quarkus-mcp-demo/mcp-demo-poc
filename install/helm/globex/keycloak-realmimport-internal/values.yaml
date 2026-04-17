@@ -4,7 +4,7 @@ keycloak:
   name: keycloak
 
 realm:
-  name: internal
+  name: internalv2
 
 hook:
   image:
