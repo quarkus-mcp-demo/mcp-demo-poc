@@ -4,7 +4,7 @@ keycloak:
   name: keycloak
 
 realm:
-  name: globex
+  name: internal
 
 hook:
   image:
@@ -25,39 +25,17 @@ hook:
         - ALL
   maxTimeToWait: 120000
 
-client:
-  gateway: 
+clients:
+  complaintsClient:
     name:
-    secret: 
+    secret:
+  storeMcpClient:
+    name:
+    secret:
+  storeAppClient:
+    name:
+    secret:
 
-users:
-  users:
-    - id: asilva
-      email: asilva@email.com
-      firstName: Addison
-      lastName: Silva
-      groups: []
-    - id: mmiller
-      email: mmiller@topvibe.com
-      firstName: Madeline
-      lastName: Miller
-      groups: []
-    - id: asanders
-      email: asanders@topgreatest.com
-      firstName: Audrey
-      lastName: Sanders
-      groups: []
-    - id: cjones
-      email: cjones@zmail.com
-      firstName: Clara
-      lastName: Jones
-      groups: []
-    - id: pwong
-      email: pwong@firstsimple.com
-      firstName: Plinio
-      lastName: Wong
-      groups: [] 
-  password: openshift
 
 groups: []
 

@@ -120,9 +120,18 @@ spec:
                     gateway: 
                       secret: {{ ocp4_workload_mcp_demo_poc_rhbk_client_gateway_secret }}
                 keycloak-realmimport-internal:
-                  client:
-                    gateway: 
-                      secret: {{ ocp4_workload_mcp_demo_poc_rhbk_client_gateway_secret }}
+                  clients:
+                  complaintsClient:
+                    name: {{ ocp_workload_mcp_demo_agent_oidc_complaints_client_id }}
+                    secret: {{ ocp_workload_mcp_demo_agent_oidc_complaints_client_secret }}
+                  storeMcpClient:
+                    name: {{ ocp_workload_mcp_demo_globex_store_mcp_client_id }}
+                    secret: {{ ocp_workload_mcp_demo_globex_store_mcp_client_secret }}
+                    clientScope: {{ ocp_workload_mcp_demo_globex_store_mcp_audience }}
+                  storeAppClient:
+                    name: {{ ocp_workload_mcp_demo_agent_globex_store_app_client_id }}
+                    secret: {{ ocp_workload_mcp_demo_agent_oidc_globex_store_app_client_secret }}
+                    clientScope: {{ ocp_workload_mcp_demo_globex_store_app_scope }}
         minio:
           enabled: true
           source:
