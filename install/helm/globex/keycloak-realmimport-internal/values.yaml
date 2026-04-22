@@ -4,7 +4,7 @@ keycloak:
   name: keycloak
 
 realm:
-  name: internalv2
+  name: internal2
 
 hook:
   image:
@@ -33,6 +33,9 @@ clients:
     name:
     secret:
   storeAppClient:
+    name:
+    secret:
+  quarkusMcpClient:
     name:
     secret:
 

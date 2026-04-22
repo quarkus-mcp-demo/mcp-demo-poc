@@ -1,7 +1,9 @@
-{{- $accountContainerId := printf "%s" (uuidv4 | toString) }}
+{{- $quarkusMcpClientContainerId := printf "%s" (uuidv4 | toString) }}
+{{- $quarkusMcpServerContainerId := printf "%s" (uuidv4 | toString) }}
+{{- $quarkusMcpServiceContainerId := printf "%s" (uuidv4 | toString) }}
 {{- $clientRealmManagementContainerId := printf "%s" (uuidv4 | toString) }}
 {{- $clientBrokerContainerId := printf "%s" (uuidv4 | toString) }}
-{{- $quarkusMcpClientContainerId := printf "%s" (uuidv4 | toString) }}
+{{- $accountContainerId := printf "%s" (uuidv4 | toString) }}
 ---
 apiVersion: k8s.keycloak.org/v2alpha1
 kind: KeycloakRealmImport
@@ -11,7 +13,7 @@ metadata:
   namespace: {{ .Values.namespace }}
   {{- end }}
   labels:
-    {{- include "keycloak-realmimport-internal.labels" $ | nindent 4 }}
+    {{- include "keycloak-realmimport-globex.labels" $ | nindent 4 }}
     app: keycloak
   annotations:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
@@ -69,21 +71,21 @@ spec:
       realm:
       - id: {{ uuidv4 }}
         name: offline_access
-        description: ${role_offline-access}
+        description: "${role_offline-access}"
         composite: false
         clientRole: false
         containerId: {{ $.Values.realm.name }}
         attributes: {}
       - id: {{ uuidv4 }}
         name: uma_authorization
-        description: ${role_uma_authorization}
+        description: "${role_uma_authorization}"
         composite: false
         clientRole: false
         containerId: {{ $.Values.realm.name }}
         attributes: {}
       - id: {{ uuidv4 }}
         name: default-roles-{{ $.Values.realm.name }}
-        description: ${role_default-roles}
+        description: "${role_default-roles}"
         composite: true
         composites:
           realm:
@@ -96,47 +98,55 @@ spec:
         clientRole: false
         containerId: {{ $.Values.realm.name }}
         attributes: {}
+{{- range $item := .Values.roles }}
+        - id: {{ uuidv4 }}
+          name: {{ $item.name }}
+          description: ''
+          composite: false
+          clientRole: false
+          containerId: {{ $.Values.realm.name }}
+          attributes: {}
+{{- end }}
       client:
-        claude: []
         realm-management:
         - id: {{ uuidv4 }}
           name: view-identity-providers
-          description: ${role_view-identity-providers}
+          description: "${role_view-identity-providers}"
           composite: false
           clientRole: true
           containerId: {{ $clientRealmManagementContainerId }}
           attributes: {}
         - id: {{ uuidv4 }}
           name: query-realms
-          description: ${role_query-realms}
+          description: "${role_query-realms}"
           composite: false
           clientRole: true
           containerId: {{ $clientRealmManagementContainerId }}
           attributes: {}
         - id: {{ uuidv4 }}
           name: view-events
-          description: ${role_view-events}
+          description: "${role_view-events}"
           composite: false
           clientRole: true
           containerId: {{ $clientRealmManagementContainerId }}
           attributes: {}
         - id: {{ uuidv4 }}
           name: manage-clients
-          description: ${role_manage-clients}
+          description: "${role_manage-clients}"
           composite: false
           clientRole: true
           containerId: {{ $clientRealmManagementContainerId }}
           attributes: {}
         - id: {{ uuidv4 }}
           name: query-groups
-          description: ${role_query-groups}
+          description: "${role_query-groups}"
           composite: false
           clientRole: true
           containerId: {{ $clientRealmManagementContainerId }}
           attributes: {}
         - id: {{ uuidv4 }}
           name: view-clients
-          description: ${role_view-clients}
+          description: "${role_view-clients}"
           composite: true
           composites:
             client:
@@ -147,14 +157,14 @@ spec:
           attributes: {}
         - id: {{ uuidv4 }}
           name: manage-events
-          description: ${role_manage-events}
+          description: "${role_manage-events}"
           composite: false
           clientRole: true
           containerId: {{ $clientRealmManagementContainerId }}
           attributes: {}
         - id: {{ uuidv4 }}
           name: realm-admin
-          description: ${role_realm-admin}
+          description: "${role_realm-admin}"
           composite: true
           composites:
             client:
@@ -162,9 +172,9 @@ spec:
               - view-identity-providers
               - query-realms
               - view-events
-              - view-clients
               - manage-clients
               - query-groups
+              - view-clients
               - manage-events
               - manage-authorization
               - impersonation
@@ -182,70 +192,70 @@ spec:
           attributes: {}
         - id: {{ uuidv4 }}
           name: manage-authorization
-          description: ${role_manage-authorization}
+          description: "${role_manage-authorization}"
           composite: false
           clientRole: true
           containerId: {{ $clientRealmManagementContainerId }}
           attributes: {}
         - id: {{ uuidv4 }}
           name: impersonation
-          description: ${role_impersonation}
+          description: "${role_impersonation}"
           composite: false
           clientRole: true
           containerId: {{ $clientRealmManagementContainerId }}
           attributes: {}
         - id: {{ uuidv4 }}
           name: manage-realm
-          description: ${role_manage-realm}
+          description: "${role_manage-realm}"
           composite: false
           clientRole: true
           containerId: {{ $clientRealmManagementContainerId }}
           attributes: {}
         - id: {{ uuidv4 }}
           name: query-users
-          description: ${role_query-users}
+          description: "${role_query-users}"
           composite: false
           clientRole: true
           containerId: {{ $clientRealmManagementContainerId }}
           attributes: {}
         - id: {{ uuidv4 }}
           name: view-realm
-          description: ${role_view-realm}
+          description: "${role_view-realm}"
           composite: false
           clientRole: true
           containerId: {{ $clientRealmManagementContainerId }}
           attributes: {}
         - id: {{ uuidv4 }}
           name: manage-users
-          description: ${role_manage-users}
+          description: "${role_manage-users}"
           composite: false
           clientRole: true
           containerId: {{ $clientRealmManagementContainerId }}
           attributes: {}
         - id: {{ uuidv4 }}
           name: create-client
-          description: ${role_create-client}
+          description: "${role_create-client}"
           composite: false
           clientRole: true
           containerId: {{ $clientRealmManagementContainerId }}
           attributes: {}
         - id: {{ uuidv4 }}
           name: manage-identity-providers
-          description: ${role_manage-identity-providers}
+          description: "${role_manage-identity-providers}"
           composite: false
           clientRole: true
           containerId: {{ $clientRealmManagementContainerId }}
           attributes: {}
         - id: {{ uuidv4 }}
           name: query-clients
-          description: ${role_query-clients}
+          description: "${role_query-clients}"
           composite: false
           clientRole: true
           containerId: {{ $clientRealmManagementContainerId }}
           attributes: {}
         - id: {{ uuidv4 }}
           name: view-users
-          description: ${role_view-users}
+          description: "${role_view-users}"
           composite: true
           composites:
             client:
@@ -257,7 +267,7 @@ spec:
           attributes: {}
         - id: {{ uuidv4 }}
           name: view-authorization
-          description: ${role_view-authorization}
+          description: "${role_view-authorization}"
           composite: false
           clientRole: true
           containerId: {{ $clientRealmManagementContainerId }}
@@ -271,15 +281,14 @@ spec:
           containerId: {{ $quarkusMcpClientContainerId }}
           attributes: {}
         quarkus-mcp-service: []
-        quarkus-store-mcp-client: []
+        globex-agent-complaints-client: []
         security-admin-console: []
-        agent-complaints-client: []
         admin-cli: []
         account-console: []
         broker:
         - id: {{ uuidv4 }}
           name: read-token
-          description: ${role_read-token}
+          description: "${role_read-token}"
           composite: false
           clientRole: true
           containerId: {{ $clientBrokerContainerId }}
@@ -287,49 +296,49 @@ spec:
         account:
         - id: {{ uuidv4 }}
           name: delete-account
-          description: ${role_delete-account}
+          description: "${role_delete-account}"
           composite: false
           clientRole: true
           containerId: {{ $accountContainerId }}
           attributes: {}
         - id: {{ uuidv4 }}
           name: view-applications
-          description: ${role_view-applications}
+          description: "${role_view-applications}"
           composite: false
           clientRole: true
           containerId: {{ $accountContainerId }}
           attributes: {}
         - id: {{ uuidv4 }}
           name: view-groups
-          description: ${role_view-groups}
+          description: "${role_view-groups}"
           composite: false
           clientRole: true
           containerId: {{ $accountContainerId }}
           attributes: {}
         - id: {{ uuidv4 }}
           name: view-profile
-          description: ${role_view-profile}
+          description: "${role_view-profile}"
           composite: false
           clientRole: true
           containerId: {{ $accountContainerId }}
           attributes: {}
         - id: {{ uuidv4 }}
           name: manage-account-links
-          description: ${role_manage-account-links}
+          description: "${role_manage-account-links}"
           composite: false
           clientRole: true
           containerId: {{ $accountContainerId }}
           attributes: {}
         - id: {{ uuidv4 }}
           name: view-consent
-          description: ${role_view-consent}
+          description: "${role_view-consent}"
           composite: false
           clientRole: true
           containerId: {{ $accountContainerId }}
           attributes: {}
         - id: {{ uuidv4 }}
           name: manage-account
-          description: ${role_manage-account}
+          description: "${role_manage-account}"
           composite: true
           composites:
             client:
@@ -340,7 +349,7 @@ spec:
           attributes: {}
         - id: {{ uuidv4 }}
           name: manage-consent
-          description: ${role_manage-consent}
+          description: "${role_manage-consent}"
           composite: true
           composites:
             client:
@@ -350,11 +359,20 @@ spec:
           containerId: {{ $accountContainerId }}
           attributes: {}
         quarkus-mcp-server: []
-    groups: []
+    groups:
+{{- range $item := .Values.groups }}
+      - name: {{ $item.name }}
+        path: "/{{ $item.name }}"
+        subGroups: []
+        attributes: {}
+        realmRoles:
+          {{- toYaml $item.roles | nindent 10 }}
+        clientRoles: {}
+{{- end }}
     defaultRole:
       id: {{ uuidv4 }}
       name: default-roles-{{ $.Values.realm.name }}
-      description: ${role_default-roles}
+      description: "${role_default-roles}"
       composite: true
       clientRole: false
       containerId: {{ $.Values.realm.name }}
@@ -400,11 +418,11 @@ spec:
     webAuthnPolicyPasswordlessExtraOrigins: []
     users:
     - id: {{ uuidv4 }}
-      username: service-account-agent-complaints-client
+      username: service-account-globex-agent-complaints-client
       emailVerified: false
       enabled: true
       totp: false
-      serviceAccountClientId: agent-complaints-client
+      serviceAccountClientId: globex-agent-complaints-client
       disableableCredentialTypes: []
       requiredActions: []
       realmRoles:
@@ -447,18 +465,6 @@ spec:
       - default-roles-{{ $.Values.realm.name }}
       notBefore: 0
       groups: []
-    - id: {{ uuidv4 }}
-      username: service-account-quarkus-store-mcp-client
-      emailVerified: false
-      enabled: true
-      totp: false
-      serviceAccountClientId: quarkus-store-mcp-client
-      disableableCredentialTypes: []
-      requiredActions: []
-      realmRoles:
-      - default-roles-{{ $.Values.realm.name }}
-      notBefore: 0
-      groups: []
     scopeMappings:
     - clientScope: offline_access
       roles:
@@ -472,15 +478,15 @@ spec:
     clients:
     - id: {{ $accountContainerId }}
       clientId: account
-      name: ${client_account}
-      rootUrl: ${authBaseUrl}
-      baseUrl: /realms/{{ $.Values.realm.name }}/account/
+      name: "${client_account}"
+      rootUrl: "${authBaseUrl}"
+      baseUrl: "/realms/internal/account/"
       surrogateAuthRequired: false
       enabled: true
       alwaysDisplayInConsole: false
       clientAuthenticatorType: client-secret
       redirectUris:
-      - /realms/{{ $.Values.realm.name }}/account/*
+      - "/realms/internal/account/*"
       webOrigins: []
       notBefore: 0
       bearerOnly: false
@@ -494,7 +500,7 @@ spec:
       protocol: openid-connect
       attributes:
         realm_client: 'false'
-        post.logout.redirect.uris: +
+        post.logout.redirect.uris: "+"
       authenticationFlowBindingOverrides: {}
       fullScopeAllowed: false
       nodeReRegistrationTimeout: 0
@@ -513,15 +519,15 @@ spec:
       - microprofile-jwt
     - id: {{ uuidv4 }}
       clientId: account-console
-      name: ${client_account-console}
-      rootUrl: ${authBaseUrl}
-      baseUrl: /realms/{{ $.Values.realm.name }}/account/
+      name: "${client_account-console}"
+      rootUrl: "${authBaseUrl}"
+      baseUrl: "/realms/internal/account/"
       surrogateAuthRequired: false
       enabled: true
       alwaysDisplayInConsole: false
       clientAuthenticatorType: client-secret
       redirectUris:
-      - /realms/{{ $.Values.realm.name }}/account/*
+      - "/realms/internal/account/*"
       webOrigins: []
       notBefore: 0
       bearerOnly: false
@@ -535,7 +541,7 @@ spec:
       protocol: openid-connect
       attributes:
         realm_client: 'false'
-        post.logout.redirect.uris: +
+        post.logout.redirect.uris: "+"
         pkce.code.challenge.method: S256
       authenticationFlowBindingOverrides: {}
       fullScopeAllowed: false
@@ -562,7 +568,7 @@ spec:
       - microprofile-jwt
     - id: {{ uuidv4 }}
       clientId: admin-cli
-      name: ${client_admin-cli}
+      name: "${client_admin-cli}"
       surrogateAuthRequired: false
       enabled: true
       alwaysDisplayInConsole: false
@@ -582,6 +588,7 @@ spec:
       attributes:
         realm_client: 'false'
         client.use.lightweight.access.token.enabled: 'true'
+        post.logout.redirect.uris: "+"
       authenticationFlowBindingOverrides: {}
       fullScopeAllowed: true
       nodeReRegistrationTimeout: 0
@@ -598,8 +605,46 @@ spec:
       - offline_access
       - organization
       - microprofile-jwt
+    - id: {{ $clientBrokerContainerId }}
+      clientId: broker
+      name: "${client_broker}"
+      surrogateAuthRequired: false
+      enabled: true
+      alwaysDisplayInConsole: false
+      clientAuthenticatorType: client-secret
+      redirectUris: []
+      webOrigins: []
+      notBefore: 0
+      bearerOnly: true
+      consentRequired: false
+      standardFlowEnabled: true
+      implicitFlowEnabled: false
+      directAccessGrantsEnabled: false
+      serviceAccountsEnabled: false
+      publicClient: false
+      frontchannelLogout: false
+      protocol: openid-connect
+      attributes:
+        realm_client: 'true'
+        post.logout.redirect.uris: "+"
+      authenticationFlowBindingOverrides: {}
+      fullScopeAllowed: false
+      nodeReRegistrationTimeout: 0
+      defaultClientScopes:
+      - web-origins
+      - acr
+      - roles
+      - profile
+      - basic
+      - email
+      optionalClientScopes:
+      - address
+      - phone
+      - offline_access
+      - organization
+      - microprofile-jwt
     - id: {{ uuidv4 }}
-      clientId: agent-complaints-client
+      clientId: globex-agent-complaints-client
       name: ''
       description: ''
       rootUrl: ''
@@ -609,11 +654,11 @@ spec:
       enabled: true
       alwaysDisplayInConsole: false
       clientAuthenticatorType: client-secret
-      secret: "{{ randAlphaNum 32 }}"
+      secret: "yFCrWheYiaT2DBnc"
       redirectUris:
-      - /*
+      - "/*"
       webOrigins:
-      - /*
+      - "/*"
       notBefore: 0
       bearerOnly: false
       consentRequired: false
@@ -630,7 +675,10 @@ spec:
         client.secret.creation.time: '1776249397'
         backchannel.logout.session.required: 'true'
         standard.token.exchange.enabled: 'false'
+        post.logout.redirect.uris: "+"
+        frontchannel.logout.session.required: 'true'
         oauth2.device.authorization.grant.enabled: 'false'
+        display.on.consent.screen: 'false'
         backchannel.logout.revoke.offline.tokens: 'false'
         dpop.bound.access.tokens: 'false'
       authenticationFlowBindingOverrides: {}
@@ -652,96 +700,6 @@ spec:
       - organization
       - quarkus-mcp-service-scope
       - microprofile-jwt
-    - id: {{ $clientBrokerContainerId }}
-      clientId: broker
-      name: ${client_broker}
-      surrogateAuthRequired: false
-      enabled: true
-      alwaysDisplayInConsole: false
-      clientAuthenticatorType: client-secret
-      redirectUris: []
-      webOrigins: []
-      notBefore: 0
-      bearerOnly: true
-      consentRequired: false
-      standardFlowEnabled: true
-      implicitFlowEnabled: false
-      directAccessGrantsEnabled: false
-      serviceAccountsEnabled: false
-      publicClient: false
-      frontchannelLogout: false
-      protocol: openid-connect
-      attributes:
-        realm_client: 'true'
-      authenticationFlowBindingOverrides: {}
-      fullScopeAllowed: false
-      nodeReRegistrationTimeout: 0
-      defaultClientScopes:
-      - web-origins
-      - acr
-      - roles
-      - profile
-      - basic
-      - email
-      optionalClientScopes:
-      - address
-      - phone
-      - offline_access
-      - organization
-      - microprofile-jwt
-    - id: {{ uuidv4 }}
-      clientId: claude
-      name: ''
-      description: ''
-      rootUrl: ''
-      adminUrl: ''
-      baseUrl: ''
-      surrogateAuthRequired: false
-      enabled: true
-      alwaysDisplayInConsole: false
-      clientAuthenticatorType: client-secret
-      redirectUris:
-      - '*'
-      webOrigins:
-      - '*'
-      - /*
-      notBefore: 0
-      bearerOnly: false
-      consentRequired: false
-      standardFlowEnabled: true
-      implicitFlowEnabled: true
-      directAccessGrantsEnabled: true
-      serviceAccountsEnabled: false
-      publicClient: true
-      frontchannelLogout: true
-      protocol: openid-connect
-      attributes:
-        realm_client: 'false'
-        oidc.ciba.grant.enabled: 'false'
-        backchannel.logout.session.required: 'true'
-        standard.token.exchange.enabled: 'false'
-        post.logout.redirect.uris: +
-        frontchannel.logout.session.required: 'true'
-        oauth2.device.authorization.grant.enabled: 'false'
-        display.on.consent.screen: 'false'
-        backchannel.logout.revoke.offline.tokens: 'false'
-        dpop.bound.access.tokens: 'false'
-      authenticationFlowBindingOverrides: {}
-      fullScopeAllowed: true
-      nodeReRegistrationTimeout: -1
-      defaultClientScopes:
-      - web-origins
-      - acr
-      - roles
-      - profile
-      - basic
-      - email
-      optionalClientScopes:
-      - address
-      - phone
-      - offline_access
-      - organization
-      - microprofile-jwt
     - id: {{ $quarkusMcpClientContainerId }}
       clientId: quarkus-mcp-client
       name: ''
@@ -753,11 +711,11 @@ spec:
       enabled: true
       alwaysDisplayInConsole: false
       clientAuthenticatorType: client-secret
-      secret: "{{ randAlphaNum 32 }}"
+      secret: "WVHFsTTbDGNv80jiC26L4WrimklKEZf2"
       redirectUris:
-      - /*
+      - "/*"
       webOrigins:
-      - /*
+      - "/*"
       notBefore: 0
       bearerOnly: false
       consentRequired: false
@@ -774,6 +732,7 @@ spec:
         client.secret.creation.time: '1774866044'
         backchannel.logout.session.required: 'true'
         standard.token.exchange.enabled: 'false'
+        post.logout.redirect.uris: "+"
         oauth2.device.authorization.grant.enabled: 'false'
         backchannel.logout.revoke.offline.tokens: 'false'
         dpop.bound.access.tokens: 'false'
@@ -806,9 +765,9 @@ spec:
       enabled: true
       alwaysDisplayInConsole: false
       clientAuthenticatorType: client-secret
-      secret: "{{ randAlphaNum 32 }}"
+      secret: "4JrfFLAFsEQ88zvn"
       redirectUris:
-      - '*'
+      - "*"
       webOrigins:
       - ''
       notBefore: 0
@@ -828,7 +787,7 @@ spec:
         client.introspection.response.allow.jwt.claim.enabled: 'false'
         standard.token.exchange.enabled: 'true'
         frontchannel.logout.session.required: 'true'
-        post.logout.redirect.uris: +
+        post.logout.redirect.uris: "+"
         oauth2.device.authorization.grant.enabled: 'false'
         backchannel.logout.revoke.offline.tokens: 'false'
         use.refresh.tokens: 'true'
@@ -841,7 +800,7 @@ spec:
         access.token.header.type.rfc9068: 'false'
         tls.client.certificate.bound.access.tokens: 'false'
         require.pushed.authorization.requests: 'false'
-        acr.loa.map: '{}'
+        acr.loa.map: "{}"
         display.on.consent.screen: 'false'
         request.object.encryption.enc: any
         token.response.type.bearer.lower-case: 'false'
@@ -866,11 +825,11 @@ spec:
       enabled: true
       alwaysDisplayInConsole: false
       clientAuthenticatorType: client-secret
-      secret: "{{ randAlphaNum 32 }}"
+      secret: "NlOLknjx0i2DqGn5"
       redirectUris:
-      - /*
+      - "/*"
       webOrigins:
-      - /*
+      - "/*"
       notBefore: 0
       bearerOnly: false
       consentRequired: false
@@ -887,61 +846,8 @@ spec:
         client.secret.creation.time: '1774866022'
         backchannel.logout.session.required: 'true'
         standard.token.exchange.enabled: 'false'
+        post.logout.redirect.uris: "+"
         oauth2.device.authorization.grant.enabled: 'false'
-        backchannel.logout.revoke.offline.tokens: 'false'
-        dpop.bound.access.tokens: 'false'
-      authenticationFlowBindingOverrides: {}
-      fullScopeAllowed: true
-      nodeReRegistrationTimeout: -1
-      defaultClientScopes:
-      - web-origins
-      - service_account
-      - acr
-      - roles
-      - profile
-      - basic
-      - email
-      optionalClientScopes:
-      - address
-      - phone
-      - offline_access
-      - organization
-      - microprofile-jwt
-    - id: {{ uuidv4 }}
-      clientId: quarkus-store-mcp-client
-      name: ''
-      description: ''
-      rootUrl: ''
-      adminUrl: ''
-      baseUrl: ''
-      surrogateAuthRequired: false
-      enabled: true
-      alwaysDisplayInConsole: false
-      clientAuthenticatorType: client-secret
-      secret: "{{ randAlphaNum 32 }}"
-      redirectUris:
-      - /*
-      webOrigins:
-      - /*
-      notBefore: 0
-      bearerOnly: false
-      consentRequired: false
-      standardFlowEnabled: false
-      implicitFlowEnabled: false
-      directAccessGrantsEnabled: false
-      serviceAccountsEnabled: true
-      publicClient: false
-      frontchannelLogout: true
-      protocol: openid-connect
-      attributes:
-        realm_client: 'false'
-        oidc.ciba.grant.enabled: 'false'
-        client.secret.creation.time: '1776075308'
-        backchannel.logout.session.required: 'true'
-        standard.token.exchange.enabled: 'true'
-        frontchannel.logout.session.required: 'true'
-        oauth2.device.authorization.grant.enabled: 'false'
-        display.on.consent.screen: 'false'
         backchannel.logout.revoke.offline.tokens: 'false'
         dpop.bound.access.tokens: 'false'
       authenticationFlowBindingOverrides: {}
@@ -963,7 +869,7 @@ spec:
       - microprofile-jwt
     - id: {{ $clientRealmManagementContainerId }}
       clientId: realm-management
-      name: ${client_realm-management}
+      name: "${client_realm-management}"
       surrogateAuthRequired: false
       enabled: true
       alwaysDisplayInConsole: false
@@ -982,6 +888,7 @@ spec:
       protocol: openid-connect
       attributes:
         realm_client: 'true'
+        post.logout.redirect.uris: "+"
       authenticationFlowBindingOverrides: {}
       fullScopeAllowed: false
       nodeReRegistrationTimeout: 0
@@ -1000,17 +907,17 @@ spec:
       - microprofile-jwt
     - id: {{ uuidv4 }}
       clientId: security-admin-console
-      name: ${client_security-admin-console}
-      rootUrl: ${authAdminUrl}
-      baseUrl: /admin/internal/console/
+      name: "${client_security-admin-console}"
+      rootUrl: "${authAdminUrl}"
+      baseUrl: "/admin/internal/console/"
       surrogateAuthRequired: false
       enabled: true
       alwaysDisplayInConsole: false
       clientAuthenticatorType: client-secret
       redirectUris:
-      - /admin/internal/console/*
+      - "/admin/internal/console/*"
       webOrigins:
-      - +
+      - "+"
       notBefore: 0
       bearerOnly: false
       consentRequired: false
@@ -1024,7 +931,7 @@ spec:
       attributes:
         realm_client: 'false'
         client.use.lightweight.access.token.enabled: 'true'
-        post.logout.redirect.uris: +
+        post.logout.redirect.uris: "+"
         pkce.code.challenge.method: S256
       authenticationFlowBindingOverrides: {}
       fullScopeAllowed: true
@@ -1063,7 +970,7 @@ spec:
       protocol: openid-connect
       attributes:
         include.in.token.scope: 'true'
-        consent.screen.text: ${addressScopeConsentText}
+        consent.screen.text: "${addressScopeConsentText}"
         display.on.consent.screen: 'true'
       protocolMappers:
       - id: {{ uuidv4 }}
@@ -1087,7 +994,7 @@ spec:
       description: 'OpenID Connect built-in scope: offline_access'
       protocol: openid-connect
       attributes:
-        consent.screen.text: ${offlineAccessScopeConsentText}
+        consent.screen.text: "${offlineAccessScopeConsentText}"
         display.on.consent.screen: 'true'
     - id: {{ uuidv4 }}
       name: phone
@@ -1095,7 +1002,7 @@ spec:
       protocol: openid-connect
       attributes:
         include.in.token.scope: 'true'
-        consent.screen.text: ${phoneScopeConsentText}
+        consent.screen.text: "${phoneScopeConsentText}"
         display.on.consent.screen: 'true'
       protocolMappers:
       - id: {{ uuidv4 }}
@@ -1130,7 +1037,7 @@ spec:
       protocol: openid-connect
       attributes:
         include.in.token.scope: 'true'
-        consent.screen.text: ${organizationScopeConsentText}
+        consent.screen.text: "${organizationScopeConsentText}"
         display.on.consent.screen: 'true'
       protocolMappers:
       - id: {{ uuidv4 }}
@@ -1139,12 +1046,13 @@ spec:
         protocolMapper: oidc-organization-membership-mapper
         consentRequired: false
         config:
-          id.token.claim: 'true'
           introspection.token.claim: 'true'
+          multivalued: 'true'
+          userinfo.token.claim: 'true'
+          id.token.claim: 'true'
           access.token.claim: 'true'
           claim.name: organization
           jsonType.label: String
-          multivalued: 'true'
     - id: {{ uuidv4 }}
       name: saml_organization
       description: Organization Membership
@@ -1164,7 +1072,7 @@ spec:
       protocol: openid-connect
       attributes:
         include.in.token.scope: 'true'
-        consent.screen.text: ${profileScopeConsentText}
+        consent.screen.text: "${profileScopeConsentText}"
         display.on.consent.screen: 'true'
       protocolMappers:
       - id: {{ uuidv4 }}
@@ -1379,6 +1287,7 @@ spec:
         config:
           introspection.token.claim: 'true'
           multivalued: 'true'
+          userinfo.token.claim: 'true'
           user.attribute: foo
           id.token.claim: 'true'
           access.token.claim: 'true'
@@ -1412,8 +1321,9 @@ spec:
         consentRequired: false
         config:
           user.session.note: AUTH_TIME
-          id.token.claim: 'true'
           introspection.token.claim: 'true'
+          userinfo.token.claim: 'true'
+          id.token.claim: 'true'
           access.token.claim: 'true'
           claim.name: auth_time
           jsonType.label: long
@@ -1431,7 +1341,7 @@ spec:
       protocol: openid-connect
       attributes:
         include.in.token.scope: 'true'
-        consent.screen.text: ${emailScopeConsentText}
+        consent.screen.text: "${emailScopeConsentText}"
         display.on.consent.screen: 'true'
       protocolMappers:
       - id: {{ uuidv4 }}
@@ -1465,7 +1375,7 @@ spec:
       description: SAML role list
       protocol: saml
       attributes:
-        consent.screen.text: ${samlRoleListScopeConsentText}
+        consent.screen.text: "${samlRoleListScopeConsentText}"
         display.on.consent.screen: 'true'
       protocolMappers:
       - id: {{ uuidv4 }}
@@ -1497,8 +1407,9 @@ spec:
           included.client.audience: quarkus-mcp-server
           id.token.claim: 'false'
           lightweight.claim: 'false'
-          access.token.claim: 'true'
           introspection.token.claim: 'true'
+          access.token.claim: 'true'
+          userinfo.token.claim: 'false'
     - id: {{ uuidv4 }}
       name: quarkus-mcp-service-scope
       description: ''
@@ -1519,11 +1430,13 @@ spec:
           included.client.audience: quarkus-mcp-service
           id.token.claim: 'false'
           lightweight.claim: 'false'
-          access.token.claim: 'true'
           introspection.token.claim: 'true'
+          access.token.claim: 'true'
+          userinfo.token.claim: 'false'
     - id: {{ uuidv4 }}
       name: acr
-      description: OpenID Connect scope for add acr (authentication context class reference) to the token
+      description: OpenID Connect scope for add acr (authentication context class reference)
+        to the token
       protocol: openid-connect
       attributes:
         include.in.token.scope: 'false'
@@ -1538,13 +1451,14 @@ spec:
           id.token.claim: 'true'
           introspection.token.claim: 'true'
           access.token.claim: 'true'
+          userinfo.token.claim: 'true'
     - id: {{ uuidv4 }}
       name: roles
       description: OpenID Connect scope for add user roles to the access token
       protocol: openid-connect
       attributes:
         include.in.token.scope: 'false'
-        consent.screen.text: ${rolesScopeConsentText}
+        consent.screen.text: "${rolesScopeConsentText}"
         display.on.consent.screen: 'true'
       protocolMappers:
       - id: {{ uuidv4 }}
@@ -1594,8 +1508,9 @@ spec:
         consentRequired: false
         config:
           user.session.note: clientAddress
-          id.token.claim: 'true'
           introspection.token.claim: 'true'
+          userinfo.token.claim: 'true'
+          id.token.claim: 'true'
           access.token.claim: 'true'
           claim.name: clientAddress
           jsonType.label: String
@@ -1606,8 +1521,9 @@ spec:
         consentRequired: false
         config:
           user.session.note: clientHost
-          id.token.claim: 'true'
           introspection.token.claim: 'true'
+          userinfo.token.claim: 'true'
+          id.token.claim: 'true'
           access.token.claim: 'true'
           claim.name: clientHost
           jsonType.label: String
@@ -1618,8 +1534,9 @@ spec:
         consentRequired: false
         config:
           user.session.note: client_id
-          id.token.claim: 'true'
           introspection.token.claim: 'true'
+          userinfo.token.claim: 'true'
+          id.token.claim: 'true'
           access.token.claim: 'true'
           claim.name: client_id
           jsonType.label: String
@@ -1683,13 +1600,13 @@ spec:
         config:
           allowed-protocol-mapper-types:
           - saml-user-property-mapper
+          - saml-user-attribute-mapper
+          - oidc-usermodel-property-mapper
           - oidc-full-name-mapper
           - saml-role-list-mapper
           - oidc-sha256-pairwise-sub-mapper
           - oidc-address-mapper
-          - saml-user-attribute-mapper
           - oidc-usermodel-attribute-mapper
-          - oidc-usermodel-property-mapper
       - id: {{ uuidv4 }}
         name: Full Scope Disabled
         providerId: scope
@@ -1713,14 +1630,14 @@ spec:
         subComponents: {}
         config:
           allowed-protocol-mapper-types:
+          - oidc-usermodel-attribute-mapper
           - saml-user-property-mapper
           - oidc-usermodel-property-mapper
-          - oidc-usermodel-attribute-mapper
-          - oidc-full-name-mapper
-          - saml-user-attribute-mapper
-          - saml-role-list-mapper
-          - oidc-address-mapper
           - oidc-sha256-pairwise-sub-mapper
+          - saml-role-list-mapper
+          - oidc-full-name-mapper
+          - oidc-address-mapper
+          - saml-user-attribute-mapper
       - id: {{ uuidv4 }}
         name: Consent Required
         providerId: consent-required
@@ -1829,7 +1746,8 @@ spec:
         userSetupAllowed: false
     - id: {{ uuidv4 }}
       alias: Browser - Conditional Organization
-      description: Flow to determine if the organization identity-first login is to be used
+      description: Flow to determine if the organization identity-first login is to be
+        used
       providerId: basic-flow
       topLevel: false
       builtIn: true
@@ -1867,7 +1785,8 @@ spec:
         userSetupAllowed: false
     - id: {{ uuidv4 }}
       alias: First Broker Login - Conditional Organization
-      description: Flow to determine if the authenticator that adds organization members is to be used
+      description: Flow to determine if the authenticator that adds organization members
+        is to be used
       providerId: basic-flow
       topLevel: false
       builtIn: true
@@ -1924,7 +1843,8 @@ spec:
         userSetupAllowed: false
     - id: {{ uuidv4 }}
       alias: Handle Existing Account
-      description: Handle what to do if there is existing account with same email/username like authenticated identity provider
+      description: Handle what to do if there is existing account with same email/username
+        like authenticated identity provider
       providerId: basic-flow
       topLevel: false
       builtIn: true
@@ -1955,7 +1875,8 @@ spec:
         userSetupAllowed: false
     - id: {{ uuidv4 }}
       alias: Reset - Conditional OTP
-      description: Flow to determine if the OTP should be reset or not. Set to REQUIRED to force.
+      description: Flow to determine if the OTP should be reset or not. Set to REQUIRED
+        to force.
       providerId: basic-flow
       topLevel: false
       builtIn: true
@@ -2119,7 +2040,8 @@ spec:
         userSetupAllowed: false
     - id: {{ uuidv4 }}
       alias: first broker login
-      description: Actions taken after first broker login with identity provider account, which is not yet linked to any Keycloak account
+      description: Actions taken after first broker login with identity provider account,
+        which is not yet linked to any Keycloak account
       providerId: basic-flow
       topLevel: true
       builtIn: true
@@ -2377,8 +2299,8 @@ spec:
     attributes:
       cibaBackchannelTokenDeliveryMode: poll
       cibaAuthRequestedUserHint: login_hint
-      oauth2DevicePollingInterval: '5'
       clientOfflineSessionMaxLifespan: '0'
+      oauth2DevicePollingInterval: '5'
       clientSessionIdleTimeout: '0'
       actionTokenGeneratedByUserLifespan.verify-email: ''
       actionTokenGeneratedByUserLifespan.idp-verify-account-via-email: ''
