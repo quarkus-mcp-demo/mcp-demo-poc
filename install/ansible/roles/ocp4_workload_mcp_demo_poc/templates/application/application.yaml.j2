@@ -60,12 +60,31 @@ spec:
                   sso:
                     authServer: https://{{ ocp4_workload_mcp_demo_poc_rhbk_host }}.{{ r_openshift_subdomain }}
                   subdomain: {{ r_openshift_subdomain }}
+                globex-store-app:
+                  internalOidc:
+                    authServerUrl: https://{{ ocp4_workload_mcp_demo_poc_rhbk_host }}.{{ r_openshift_subdomain }}
+                    realm: {{ ocp_workload_mcp_demo_internal_oidc_realm }}
+                    clientId: {{ ocp_workload_mcp_demo_globex_mcp_server_clientid }}
+                    audience: {{ ocp_workload_mcp_demo_globex_mcp_service_audience }}
                 globex-store-mcp:
                   route:
                     host: {{ ocp4_workload_mcp_demo_poc_globex_store_mcp_host }}.{{ r_openshift_subdomain }}
+                  oidc:
+                    authServerUrl: https://{{ ocp4_workload_mcp_demo_poc_rhbk_host }}.{{ r_openshift_subdomain }}
+                    realm: {{ ocp_workload_mcp_demo_internal_oidc_realm }}
+                    storeMcp:
+                      clientId: {{ ocp_workload_mcp_demo_globex_mcp_server_clientid }}
+                      audience: {{ ocp_workload_mcp_demo_globex_mcp_server_audience }}
+                    storeApp:
+                      clientId: {{ ocp_workload_mcp_demo_globex_mcp_server_clientid }}
+                      clientSecret: {{ ocp_workload_mcp_demo_globex_mcp_server_clientsecret }}
+                      scope:  {{ ocp_workload_mcp_demo_globex_mcp_service_clientscope }}
                 globex-complaints:
                   route:
                     host: {{ ocp4_workload_mcp_demo_poc_globex_complaints_host }}.{{ r_openshift_subdomain }}
+                  internalOidc:
+                    authServerUrl: https://{{ ocp4_workload_mcp_demo_poc_rhbk_host }}.{{ r_openshift_subdomain }}
+                    realm: {{ ocp_workload_mcp_demo_internal_oidc_realm }}
                 globex-agent:
                   llm:
                     routing:
@@ -85,12 +104,38 @@ spec:
                   oidc:
                     authServerUrl: https://{{ ocp4_workload_mcp_demo_poc_rhbk_host }}.{{ r_openshift_subdomain }}
                     clientSecret: {{ ocp4_workload_mcp_demo_poc_rhbk_client_gateway_secret }}
+                    internal:
+                      authServerUrl: https://{{ ocp4_workload_mcp_demo_poc_rhbk_host }}.{{ r_openshift_subdomain }}
+                      realm: {{ ocp_workload_mcp_demo_internal_oidc_realm }}
+                      complaints:
+                        clientId: {{ ocp_workload_mcp_demo_agent_oidc_complaints_client_id }}
+                        secret: {{ ocp_workload_mcp_demo_agent_oidc_complaints_client_secret }}
+                      globexStore:
+                        clientId: {{ ocp_workload_mcp_demo_globex_mcp_client_clientid }}
+                        clientSecret: {{ ocp_workload_mcp_demo_globex_mcp_client_clientsecret }}
                   route:
                     host: {{ ocp4_workload_mcp_demo_poc_globex_agent_host }}.{{ r_openshift_subdomain }}
                 keycloak-realmimport-globex:
                   client:
                     gateway: 
                       secret: {{ ocp4_workload_mcp_demo_poc_rhbk_client_gateway_secret }}
+                keycloak-realmimport-internal:
+                  clients:
+                    complaintsClient:
+                      id: {{ ocp_workload_mcp_demo_agent_oidc_complaints_client_id }}
+                      secret: {{ ocp_workload_mcp_demo_agent_oidc_complaints_client_secret }}
+                    mcpClient:
+                      id: {{ ocp_workload_mcp_demo_globex_mcp_client_clientid }}
+                      secret: {{ ocp_workload_mcp_demo_globex_mcp_client_clientsecret }}
+                      scope: {{ ocp_workload_mcp_demo_globex_mcp_client_clientscope }}
+                    mcpServer:
+                      id: {{ ocp_workload_mcp_demo_globex_mcp_server_clientid }}
+                      secret: {{ ocp_workload_mcp_demo_globex_mcp_server_clientsecret }}
+                      scope: {{ ocp_workload_mcp_demo_globex_mcp_server_clientscope }}
+                    mcpService:
+                      id: {{ ocp_workload_mcp_demo_globex_mcp_service_clientid }}
+                      secret: {{ ocp_workload_mcp_demo_globex_mcp_service_clientsecret }}
+                      scope: {{ ocp_workload_mcp_demo_globex_mcp_service_clientscope }}
         minio:
           enabled: true
           source:

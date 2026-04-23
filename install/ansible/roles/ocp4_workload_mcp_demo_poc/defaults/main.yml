@@ -180,6 +180,35 @@ ocp4_workload_mcp_demo_poc_order_llm_model_name: "{{ order_llm_model_name }}"
 ocp4_workload_mcp_demo_poc_order_llm_api_key: "{{ order_llm_api_key }}"
 ocp4_workload_mcp_demo_poc_order_llm_base_url: "{{ order_llm_base_url }}"
 
+
+# ------------------------------------------------
+# Globex Agent OIDC Setup to call MCP and Complaints service:
+# ------------------------------------------------
+ocp_workload_mcp_demo_internal_oidc_realm: internal
+ocp_workload_mcp_demo_agent_oidc_complaints_client_id: globex-agent-complaints-client
+ocp_workload_mcp_demo_agent_oidc_complaints_client_secret:
+  "{{ lookup('ansible.builtin.password', '/tmp/passwordfile-complaints-client-secret', chars=['ascii_letters', 'digits'], length=16) }}"
+
+ocp_workload_mcp_demo_globex_mcp_client_clientid: globex-mcp-client
+ocp_workload_mcp_demo_globex_mcp_client_clientsecret: 
+  "{{ lookup('ansible.builtin.password', '/tmp/passwordfile-globex-mcp-client-clientsecret', chars=['ascii_letters', 'digits'], length=16) }}"
+ocp_workload_mcp_demo_globex_mcp_client_clientscope: globex-mcp-client-scope
+ocp_workload_mcp_demo_globex_mcp_client_audience: globex-mcp-client
+
+ocp_workload_mcp_demo_globex_mcp_server_clientid: globex-mcp-server
+ocp_workload_mcp_demo_globex_mcp_server_clientsecret: 
+  "{{ lookup('ansible.builtin.password', '/tmp/passwordfile-globex-mcp-server-clientsecret', chars=['ascii_letters', 'digits'], length=16) }}"
+ocp_workload_mcp_demo_globex_mcp_server_clientscope: globex-mcp-server-scope
+ocp_workload_mcp_demo_globex_mcp_server_audience: globex-mcp-server
+
+
+ocp_workload_mcp_demo_globex_mcp_service_clientid: globex-mcp-service
+ocp_workload_mcp_demo_globex_mcp_service_clientsecret: 
+  "{{ lookup('ansible.builtin.password', '/tmp/passwordfile-globex-mcp-service-clientsecret', chars=['ascii_letters', 'digits'], length=16) }}"
+ocp_workload_mcp_demo_globex_mcp_service_clientscope: globex-mcp-service-scope
+ocp_workload_mcp_demo_globex_mcp_service_audience: globex-mcp-service
+
+
 # ------------------------------------------------
 # App of apps
 # ------------------------------------------------
@@ -190,7 +219,7 @@ ocp4_workload_mcp_demo_poc_app_application_namespace: openshift-gitops
 ocp4_workload_mcp_demo_poc_app_namespace: openshift-gitops
 
 ocp4_workload_mcp_demo_poc_app_gitops_repo: https://github.com/quarkus-mcp-demo/mcp-demo-poc.git
-ocp4_workload_mcp_demo_poc_app_gitops_repo_tag: main
+ocp4_workload_mcp_demo_poc_app_gitops_repo_tag: oidc-0.1
 ocp4_workload_mcp_demo_poc_app_gitops_repo_path: install/helm/app-of-apps
 
 ocp4_workload_mcp_demo_poc_app_gitops_minio_root_user: minio

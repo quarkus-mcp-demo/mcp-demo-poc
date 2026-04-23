@@ -4,10 +4,10 @@ fullnameOverride: ""
 replicaCount: 1
 
 image:
-  repository: quay.io/cloud-architecture-workshop/globex-store
+  repository: quay.io/quarkus_mcp_demo/globex-store-app
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: fba9639
+  tag: latest
 
 podAnnotations: {}
 
@@ -78,3 +78,10 @@ globexDb:
 argocd:
   enabled: true
   syncwave: "0"
+
+internalOidc:
+  authServerUrl: 
+  realm:
+  audience:
+  clientId:
+  tenantPath: "/agents"

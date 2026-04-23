@@ -16,7 +16,7 @@ amqstreams:
   destinationNamespace: kafka
   source:
     repoUrl: https://github.com/quarkus-mcp-demo/mcp-demo-poc.git
-    targetRevision: main
+    targetRevision: oidc-0.1
     path: install/helm/amq-streams
     helm:
       values:
@@ -68,7 +68,7 @@ keycloak:
   destinationNamespace: keycloak
   source:
     repoUrl: https://github.com/quarkus-mcp-demo/mcp-demo-poc.git
-    targetRevision: main
+    targetRevision: oidc-0.1
     path: install/helm/keycloak
     helm:
       values:
@@ -89,7 +89,7 @@ globex:
   destinationNamespace: globex
   source:
     repoUrl: https://github.com/quarkus-mcp-demo/mcp-demo-poc.git
-    targetRevision: main
+    targetRevision: oidc-0.1
     path: install/helm/globex
     helm:
       values:
@@ -168,7 +168,7 @@ lgtm:
   destinationNamespace: lgtm
   source:
     repoUrl: https://github.com/quarkus-mcp-demo/mcp-demo-poc.git
-    targetRevision: main
+    targetRevision: oidc-0.1
     path: install/helm/lgtm
     helm:
       values:
@@ -205,7 +205,7 @@ minio:
   destinationNamespace: lgtm
   source:
     repoUrl: https://github.com/quarkus-mcp-demo/mcp-demo-poc.git
-    targetRevision: main
+    targetRevision: oidc-0.1
     path: install/helm/minio
     helm:
       values:
