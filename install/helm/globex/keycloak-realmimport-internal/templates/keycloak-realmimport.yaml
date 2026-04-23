@@ -1,6 +1,6 @@
-{{- $quarkusMcpClientContainerId := printf "%s" (uuidv4 | toString) }}
-{{- $quarkusMcpServerContainerId := printf "%s" (uuidv4 | toString) }}
-{{- $quarkusMcpServiceContainerId := printf "%s" (uuidv4 | toString) }}
+{{- $globexMcpClientContainerId := printf "%s" (uuidv4 | toString) }}
+{{- $globexMcpServerContainerId := printf "%s" (uuidv4 | toString) }}
+{{- $globexMcpServiceContainerId := printf "%s" (uuidv4 | toString) }}
 {{- $clientRealmManagementContainerId := printf "%s" (uuidv4 | toString) }}
 {{- $clientBrokerContainerId := printf "%s" (uuidv4 | toString) }}
 {{- $accountContainerId := printf "%s" (uuidv4 | toString) }}
@@ -272,16 +272,16 @@ spec:
           clientRole: true
           containerId: {{ $clientRealmManagementContainerId }}
           attributes: {}
-        quarkus-mcp-client:
+        {{ $.Values.clients.mcpClient.id }}:
         - id: {{ uuidv4 }}
           name: globex
           description: ''
           composite: false
           clientRole: true
-          containerId: {{ $quarkusMcpClientContainerId }}
+          containerId: {{ $globexMcpClientContainerId }}
           attributes: {}
-        quarkus-mcp-service: []
-        globex-agent-complaints-client: []
+        {{ $.Values.clients.mcpService.id }}: []
+        {{ $.Values.clients.complaintsClient.id }}: []
         security-admin-console: []
         admin-cli: []
         account-console: []
@@ -358,7 +358,7 @@ spec:
           clientRole: true
           containerId: {{ $accountContainerId }}
           attributes: {}
-        quarkus-mcp-server: []
+        {{ $.Values.clients.mcpServer.id }}: []
     groups:
 {{- range $item := .Values.groups }}
       - name: {{ $item.name }}
@@ -418,11 +418,11 @@ spec:
     webAuthnPolicyPasswordlessExtraOrigins: []
     users:
     - id: {{ uuidv4 }}
-      username: service-account-globex-agent-complaints-client
+      username: service-account-{{ $.Values.clients.complaintsClient.id }}
       emailVerified: false
       enabled: true
       totp: false
-      serviceAccountClientId: globex-agent-complaints-client
+      serviceAccountClientId: {{ $.Values.clients.complaintsClient.id }}
       disableableCredentialTypes: []
       requiredActions: []
       realmRoles:
@@ -430,11 +430,11 @@ spec:
       notBefore: 0
       groups: []
     - id: {{ uuidv4 }}
-      username: service-account-quarkus-mcp-client
+      username: service-account-{{ $.Values.clients.mcpClient.id }}
       emailVerified: false
       enabled: true
       totp: false
-      serviceAccountClientId: quarkus-mcp-client
+      serviceAccountClientId: {{ $.Values.clients.mcpClient.id }}
       disableableCredentialTypes: []
       requiredActions: []
       realmRoles:
@@ -442,11 +442,11 @@ spec:
       notBefore: 0
       groups: []
     - id: {{ uuidv4 }}
-      username: service-account-quarkus-mcp-server
+      username: service-account-{{ $.Values.clients.mcpServer.id }}
       emailVerified: false
       enabled: true
       totp: false
-      serviceAccountClientId: quarkus-mcp-server
+      serviceAccountClientId: {{ $.Values.clients.mcpServer.id }}
       disableableCredentialTypes: []
       requiredActions: []
       realmRoles:
@@ -454,11 +454,11 @@ spec:
       notBefore: 0
       groups: []
     - id: {{ uuidv4 }}
-      username: service-account-quarkus-mcp-service
+      username: service-account-{{ $.Values.clients.mcpService.id }}
       emailVerified: false
       enabled: true
       totp: false
-      serviceAccountClientId: quarkus-mcp-service
+      serviceAccountClientId: {{ $.Values.clients.mcpService.id }}
       disableableCredentialTypes: []
       requiredActions: []
       realmRoles:
@@ -644,7 +644,7 @@ spec:
       - organization
       - microprofile-jwt
     - id: {{ uuidv4 }}
-      clientId: globex-agent-complaints-client
+      clientId: {{ $.Values.clients.complaintsClient.id }}
       name: ''
       description: ''
       rootUrl: ''
@@ -654,7 +654,7 @@ spec:
       enabled: true
       alwaysDisplayInConsole: false
       clientAuthenticatorType: client-secret
-      secret: "yFCrWheYiaT2DBnc"
+      secret: {{ $.Values.clients.complaintsClient.secret }}
       redirectUris:
       - "/*"
       webOrigins:
@@ -694,14 +694,14 @@ spec:
       - email
       optionalClientScopes:
       - address
-      - quarkus-mcp-server-scope
+      - {{ $.Values.clients.mcpServer.scope }}
       - phone
       - offline_access
       - organization
-      - quarkus-mcp-service-scope
+      - {{ $.Values.clients.mcpService.id }}-scope
       - microprofile-jwt
-    - id: {{ $quarkusMcpClientContainerId }}
-      clientId: quarkus-mcp-client
+    - id: {{ $globexMcpClientContainerId }}
+      clientId: {{ $.Values.clients.mcpClient.id }}
       name: ''
       description: ''
       rootUrl: ''
@@ -711,7 +711,7 @@ spec:
       enabled: true
       alwaysDisplayInConsole: false
       clientAuthenticatorType: client-secret
-      secret: "WVHFsTTbDGNv80jiC26L4WrimklKEZf2"
+      secret: {{ $.Values.clients.mcpClient.secret }}
       redirectUris:
       - "/*"
       webOrigins:
@@ -743,7 +743,7 @@ spec:
       - web-origins
       - service_account
       - acr
-      - quarkus-mcp-server-scope
+      - {{ $.Values.clients.mcpServer.scope }}
       - roles
       - profile
       - basic
@@ -755,7 +755,7 @@ spec:
       - organization
       - microprofile-jwt
     - id: {{ uuidv4 }}
-      clientId: quarkus-mcp-server
+      clientId: {{ $.Values.clients.mcpServer.id }}
       name: ''
       description: ''
       rootUrl: ''
@@ -765,7 +765,7 @@ spec:
       enabled: true
       alwaysDisplayInConsole: false
       clientAuthenticatorType: client-secret
-      secret: "4JrfFLAFsEQ88zvn"
+      secret: {{ $.Values.clients.mcpServer.secret }}
       redirectUris:
       - "*"
       webOrigins:
@@ -810,12 +810,12 @@ spec:
       nodeReRegistrationTimeout: -1
       defaultClientScopes:
       - service_account
-      - quarkus-mcp-service-scope
+      - {{ $.Values.clients.mcpService.id }}-scope
       - basic
       optionalClientScopes:
       - microprofile-jwt
     - id: {{ uuidv4 }}
-      clientId: quarkus-mcp-service
+      clientId: {{ $.Values.clients.mcpService.id }}
       name: ''
       description: ''
       rootUrl: ''
@@ -825,7 +825,7 @@ spec:
       enabled: true
       alwaysDisplayInConsole: false
       clientAuthenticatorType: client-secret
-      secret: "NlOLknjx0i2DqGn5"
+      secret: {{ $.Values.clients.mcpService.secret }}
       redirectUris:
       - "/*"
       webOrigins:
@@ -1388,8 +1388,8 @@ spec:
           attribute.nameformat: Basic
           attribute.name: Role
     - id: {{ uuidv4 }}
-      name: quarkus-mcp-server-scope
-      description: quarkus-mcp-server-scope
+      name: {{ $.Values.clients.mcpServer.id }}-scope
+      description: {{ $.Values.clients.mcpServer.id }}-scope
       protocol: openid-connect
       attributes:
         include.in.token.scope: 'true'
@@ -1399,19 +1399,19 @@ spec:
         include.in.openid.provider.metadata: 'true'
       protocolMappers:
       - id: {{ uuidv4 }}
-        name: quarkus-mcp-server-as-audience
+        name: {{ $.Values.clients.mcpServer.id }}-as-audience
         protocol: openid-connect
         protocolMapper: oidc-audience-mapper
         consentRequired: false
         config:
-          included.client.audience: quarkus-mcp-server
+          included.client.audience: {{ $.Values.clients.mcpServer.id }}
           id.token.claim: 'false'
           lightweight.claim: 'false'
           introspection.token.claim: 'true'
           access.token.claim: 'true'
           userinfo.token.claim: 'false'
     - id: {{ uuidv4 }}
-      name: quarkus-mcp-service-scope
+      name: {{ $.Values.clients.mcpService.id }}-scope
       description: ''
       protocol: openid-connect
       attributes:
@@ -1422,12 +1422,12 @@ spec:
         include.in.openid.provider.metadata: 'true'
       protocolMappers:
       - id: {{ uuidv4 }}
-        name: quarkus-mcp-service-as-audience
+        name: {{ $.Values.clients.mcpService.id }}-as-audience
         protocol: openid-connect
         protocolMapper: oidc-audience-mapper
         consentRequired: false
         config:
-          included.client.audience: quarkus-mcp-service
+          included.client.audience: {{ $.Values.clients.mcpService.id }}
           id.token.claim: 'false'
           lightweight.claim: 'false'
           introspection.token.claim: 'true'
@@ -1555,8 +1555,8 @@ spec:
     - phone
     - microprofile-jwt
     - organization
-    - quarkus-mcp-service-scope
-    - quarkus-mcp-server-scope
+    - {{ $.Values.clients.mcpService.id }}-scope
+    - {{ $.Values.clients.mcpServer.scope }}
     browserSecurityHeaders:
       contentSecurityPolicyReportOnly: ''
       xContentTypeOptions: nosniff

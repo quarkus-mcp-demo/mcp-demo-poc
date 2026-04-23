@@ -4,7 +4,7 @@ keycloak:
   name: keycloak
 
 realm:
-  name: internal2
+  name: internal
 
 hook:
   image:
@@ -27,17 +27,20 @@ hook:
 
 clients:
   complaintsClient:
-    name:
+    id:
     secret:
-  storeMcpClient:
-    name:
+  mcpClient:
+    id:
     secret:
-  storeAppClient:
-    name:
+    scope:
+  mcpStore:
+    id:
     secret:
-  quarkusMcpClient:
-    name:
+    scope:
+  mcpService:
+    id:
     secret:
+    scope:
 
 
 groups: []

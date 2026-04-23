@@ -189,32 +189,24 @@ ocp_workload_mcp_demo_agent_oidc_complaints_client_id: globex-agent-complaints-c
 ocp_workload_mcp_demo_agent_oidc_complaints_client_secret:
   "{{ lookup('ansible.builtin.password', '/tmp/passwordfile-complaints-client-secret', chars=['ascii_letters', 'digits'], length=16) }}"
 
-ocp_workload_mcp_demo_agent_oidc_globex_store_client_id: quarkus-mcp-client
-ocp_workload_mcp_demo_agent_oidc_globex_store_client_secret:
-  "{{ lookup('ansible.builtin.password', '/tmp/passwordfile-globex-store-client-secret', chars=['ascii_letters', 'digits'], length=16) }}"
+ocp_workload_mcp_demo_globex_mcp_client_clientid: globex-mcp-client
+ocp_workload_mcp_demo_globex_mcp_client_clientsecret: 
+  "{{ lookup('ansible.builtin.password', '/tmp/passwordfile-globex-mcp-client-clientsecret', chars=['ascii_letters', 'digits'], length=16) }}"
+ocp_workload_mcp_demo_globex_mcp_client_clientscope: globex-mcp-client-scope
+ocp_workload_mcp_demo_globex_mcp_client_audience: globex-mcp-client
+
+ocp_workload_mcp_demo_globex_mcp_server_clientid: globex-mcp-server
+ocp_workload_mcp_demo_globex_mcp_server_clientsecret: 
+  "{{ lookup('ansible.builtin.password', '/tmp/passwordfile-globex-mcp-server-clientsecret', chars=['ascii_letters', 'digits'], length=16) }}"
+ocp_workload_mcp_demo_globex_mcp_server_clientscope: globex-mcp-server-scope
+ocp_workload_mcp_demo_globex_mcp_server_audience: globex-mcp-server
 
 
-
-# ------------------------------------------------
-# globex-store-mcp OIDC configuration:
-# ------------------------------------------------
-ocp_workload_mcp_demo_globex_store_mcp_client_id: quarkus-mcp-server
-ocp_workload_mcp_demo_globex_store_mcp_audience: quarkus-mcp-server
-ocp_workload_mcp_demo_globex_store_mcp_client_secret:
-  "{{ lookup('ansible.builtin.password', '/tmp/passwordfile-globex-mcp-store-client-secret', chars=['ascii_letters', 'digits'], length=16) }}"
-
-ocp_workload_mcp_demo_agent_globex_store_app_client_id: quarkus-mcp-server
-ocp_workload_mcp_demo_globex_store_app_scope: quarkus-mcp-service-scope
-ocp_workload_mcp_demo_agent_oidc_globex_store_app_client_secret:
-  "{{ lookup('ansible.builtin.password', '/tmp/passwordfile-globex-store-app-client-secret', chars=['ascii_letters', 'digits'], length=16) }}"
-
-
-# ------------------------------------------------
-# globex-store-app OIDC configuration:
-# ------------------------------------------------
-ocp_workload_mcp_demo_globex_store_app_oidc_client_id: quarkus-mcp-server
-ocp_workload_mcp_demo_globex_store_app_oidc_audience: quarkus-mcp-service
-
+ocp_workload_mcp_demo_globex_mcp_service_clientid: globex-mcp-service
+ocp_workload_mcp_demo_globex_mcp_service_clientsecret: 
+  "{{ lookup('ansible.builtin.password', '/tmp/passwordfile-globex-mcp-service-clientsecret', chars=['ascii_letters', 'digits'], length=16) }}"
+ocp_workload_mcp_demo_globex_mcp_service_clientscope: globex-mcp-service-scope
+ocp_workload_mcp_demo_globex_mcp_service_audience: globex-mcp-service
 
 
 # ------------------------------------------------
