@@ -33,7 +33,7 @@ clients:
     id:
     secret:
     scope:
-  mcpStore:
+  mcpServer:
     id:
     secret:
     scope:
