@@ -217,3 +217,92 @@ minio:
   argocd:
     enabled: true
     syncwave: "1"
+
+contextforge:
+  enabled: true
+  applicationName: contextforge
+  applicationNamespace: openshift-gitops
+  destinationNamespace: contextforge
+  source:
+    repoUrl: https://github.com/IBM/mcp-context-forge
+    targetRevision: main
+    path: charts/mcp-stack
+    helm:
+      values:
+        mcpContextForge:
+          replicaCount: 1
+          hpa:
+            enabled: false
+          resources:
+            limits:
+              cpu: "2"
+              memory: 2Gi
+            requests:
+              cpu: 500m
+              memory: 768Mi
+          metrics:
+            enabled: false
+          config:
+            ENVIRONMENT: production          # deployment environment (development/staging/production)
+            APP_DOMAIN:
+            CORS_ENABLED: "true"             # enable CORS processing in gateway
+            CORS_ALLOW_CREDENTIALS: "true"   # allow credentials in CORS requests
+            ALLOWED_ORIGINS:
+            SKIP_SSL_VERIFY: "false"         # skip TLS certificate verification on upstream calls
+            ENABLE_METRICS: "true"
+          secret:
+            BASIC_AUTH_PASSWORD: contextforge          # password for basic-auth (CHANGE IN PROD!)
+            JWT_SECRET_KEY:
+            AUTH_ENCRYPTION_SECRET:
+            PLATFORM_ADMIN_PASSWORD: contextforge     # password for bootstrap platform admin user
+            REQUIRE_STRONG_SECRETS: "false" 
+            DEFAULT_USER_PASSWORD: contextforge       # default password for new users (bootstrap)
+            ADMIN_REQUIRE_PASSWORD_CHANGE_ON_BOOTSTRAP: "false"
+            REQUIRE_PASSWORD_CHANGE_FOR_DEFAULT_PASSWORD: "false" # require change for default password
+            PASSWORD_POLICY_ENABLED: "false"         # enable password policy enforcement
+            PASSWORD_PREVENT_REUSE: "false"
+            MIN_PASSWORD_LENGTH: "8"              # minimum password length for validation
+            MIN_SECRET_LENGTH: "32"                # minimum secret key length for validation
+          ingress:
+            enabled: false
+        migration:
+          hookPhase: "post-install"
+          hostKey: "host"
+          portKey: "port"
+        postgres:
+          enabled: true
+          persistence:
+            enabled: true
+          credentials:                  # used only when existingSecret is blank
+            database: postgresdb
+            user: admin
+            password: test123
+        pgbouncer:
+          enabled: false
+        redis:
+          enabled: true
+          image:
+            repository: docker.io/library/redis
+            tag: "7"
+          persistence:
+            enabled: true               # Set to true to enable Redis persistence
+            storageClassName: ""         # Use empty string for default StorageClass
+            volumeName: ""               # Pin to a specific PV by name (optional). When set, the PVC binds to that PV.
+            accessModes: [ReadWriteOnce]
+            size: 1Gi
+            reclaimPolicy: Retain        # Retain prevents data loss when PVC is deleted (manual cleanup required after uninstall)
+            annotations: {}              # Optional annotations for backup tools
+        route:
+          enabled: true
+          host: ""
+          tls:
+            termination: edge
+        mcpFastTimeServer:
+          enabled: true            # switch to true to deploy
+          replicaCount: 1
+          ingress:
+            enabled: false
+
+  argocd:
+    enabled: true
+    syncwave: "2"    
