@@ -8,10 +8,14 @@ import org.globex.mcp.store.service.model.Customer;
 import org.globex.mcp.store.service.model.Order;
 import org.globex.mcp.store.service.model.Product;
 
+import io.quarkus.oidc.token.propagation.common.AccessToken;
+
 import java.util.List;
 
-@RegisterRestClient(configKey = "globex-store")
-@Path("/services")
+@RegisterRestClient()
+@Path("/agents")
+@AccessToken
+
 public interface GlobexStoreApi {
 
     @GET

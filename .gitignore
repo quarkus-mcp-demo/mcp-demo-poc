@@ -49,3 +49,4 @@ nb-configuration.xml
 
 # Ansible
 .ansible
+apps/globex-agent/src/main/resources/application.local
