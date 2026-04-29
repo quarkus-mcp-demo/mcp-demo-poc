@@ -16,7 +16,7 @@ amqstreams:
   destinationNamespace: kafka
   source:
     repoUrl: https://github.com/quarkus-mcp-demo/mcp-demo-poc.git
-    targetRevision: oidc-0.1
+    targetRevision: main
     path: install/helm/amq-streams
     helm:
       values:
@@ -68,7 +68,7 @@ keycloak:
   destinationNamespace: keycloak
   source:
     repoUrl: https://github.com/quarkus-mcp-demo/mcp-demo-poc.git
-    targetRevision: oidc-0.1
+    targetRevision: main
     path: install/helm/keycloak
     helm:
       values:
@@ -89,7 +89,7 @@ globex:
   destinationNamespace: globex
   source:
     repoUrl: https://github.com/quarkus-mcp-demo/mcp-demo-poc.git
-    targetRevision: oidc-0.1
+    targetRevision: main
     path: install/helm/globex
     helm:
       values:
@@ -168,7 +168,7 @@ lgtm:
   destinationNamespace: lgtm
   source:
     repoUrl: https://github.com/quarkus-mcp-demo/mcp-demo-poc.git
-    targetRevision: oidc-0.1
+    targetRevision: main
     path: install/helm/lgtm
     helm:
       values:
@@ -205,7 +205,7 @@ minio:
   destinationNamespace: lgtm
   source:
     repoUrl: https://github.com/quarkus-mcp-demo/mcp-demo-poc.git
-    targetRevision: oidc-0.1
+    targetRevision: main
     path: install/helm/minio
     helm:
       values:
@@ -265,6 +265,71 @@ contextforge:
             MIN_SECRET_LENGTH: "32"                # minimum secret key length for validation
           ingress:
             enabled: false
+          pluginConfig:
+            enabled: true
+            plugins: |
+              plugin_dirs:
+                - "plugins/native"
+                - "plugins/custom"
+              plugin_settings:
+                parallel_execution_within_band: true
+                plugin_timeout: 120
+                fail_on_plugin_error: false
+                enable_plugin_api: true
+                plugin_health_check_interval: 120
+                include_user_info: false
+              plugins:
+                - name: "PIIFilterPlugin"
+                  kind: "cpex_pii_filter.PIIFilterPlugin"
+                  description: "Detects and masks Personally Identifiable Information"
+                  version: "0.1.0"
+                  author: "Mihai Criveti"
+                  hooks: ["prompt_pre_fetch", "prompt_post_fetch", "tool_pre_invoke", "tool_post_invoke"]
+                  tags: ["security", "pii", "compliance", "filter", "gdpr", "hipaa"]
+                  mode: "enforce"
+                  priority: 50
+                  conditions:
+                    - prompts: []
+                      server_ids: []
+                      tenant_ids: []
+                  config:
+                    detect_ssn: true
+                    detect_credit_card: true
+                    detect_email: true
+                    detect_phone: false
+                    detect_ip_address: false
+                    default_mask_strategy: "partial"
+                    redaction_text: "[PII_REDACTED]"
+                    block_on_detection: false
+                    log_detections: true
+                    include_detection_details: true
+                    whitelist_patterns:
+                      - "test@example.com"
+                      - "555-555-5555"
+                - name: "SecretsDetection"
+                  kind: "cpex_secrets_detection.SecretsDetectionPlugin"
+                  description: "Detects keys/tokens/secrets in inputs/outputs; optional redaction/blocking"
+                  version: "0.1.0"
+                  author: "ContextForge"
+                  hooks: ["prompt_pre_fetch", "tool_post_invoke", "resource_post_fetch"]
+                  tags: ["security", "secrets", "dlp"]
+                  mode: "permissive"
+                  priority: 51
+                  conditions: []
+                  config:
+                    enabled:
+                      aws_access_key_id: true
+                      aws_secret_access_key: true
+                      google_api_key: true
+                      slack_token: true
+                      private_key_block: true
+                      jwt_like: true
+                      hex_secret_32: true
+                      base64_24: false
+                    redact: false
+                    redaction_text: "***REDACTED***"
+                    block_on_detection: true
+                    min_findings_to_block: 1
         migration:
           hookPhase: "post-install"
           hostKey: "host"

@@ -221,6 +221,17 @@ ocp4_workload_mcp_demo_poc_context_forge_auth_encryption_secret:
 
 
 # ------------------------------------------------
+# Context Forge
+# ------------------------------------------------
+
+ocp4_workload_mcp_demo_poc_context_forge_host: context-forge
+ocp4_workload_mcp_demo_poc_context_forge_jwt_secret_key:
+  "{{ lookup('ansible.builtin.password', '/tmp/contextforge-jwt-secret-key', chars=['ascii_letters', 'digits'], length=36) }}"
+ocp4_workload_mcp_demo_poc_context_forge_auth_encryption_secret:
+  "{{ lookup('ansible.builtin.password', '/tmp/contextforge-auth-encryption-secret', chars=['ascii_letters', 'digits'], length=16) }}"
+
+
+# ------------------------------------------------
 # App of apps
 # ------------------------------------------------
 
