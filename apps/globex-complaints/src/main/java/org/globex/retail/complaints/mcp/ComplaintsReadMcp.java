@@ -73,4 +73,15 @@ public class ComplaintsReadMcp {
             throw new ToolCallException("Failed to execute query: " + e.getMessage(), e);
         }
     }
+
+    @McpServer("read")
+    @Tool(name = "get_last_1000_complaints", description = "Get the last 1000 complaints from the database")
+    public String getLast1000Complaints() {
+        String query = "SELECT * FROM complaints ORDER BY id DESC LIMIT 1000";
+        try {
+            return objectMapper.writeValueAsString(databaseService.queryDatabase(query));
+        } catch (Exception e) {
+            throw new ToolCallException("Failed to get recent complaints: " + e.getMessage(), e);
+        }
+    }
 }
