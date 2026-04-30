@@ -230,6 +230,9 @@ contextforge:
     helm:
       values:
         mcpContextForge:
+          image:
+            repository: ghcr.io/ibm/mcp-context-forge
+            tag: d5076967c78361ebee3bb5f39b374b3283e28cd0            
           replicaCount: 1
           hpa:
             enabled: false
