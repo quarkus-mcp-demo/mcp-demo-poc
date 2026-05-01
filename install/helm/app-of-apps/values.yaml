@@ -225,14 +225,11 @@ contextforge:
   destinationNamespace: contextforge
   source:
     repoUrl: https://github.com/IBM/mcp-context-forge
-    targetRevision: main
+    targetRevision: v1.0.0
     path: charts/mcp-stack
     helm:
       values:
         mcpContextForge:
-          image:
-            repository: ghcr.io/ibm/mcp-context-forge
-            tag: d5076967c78361ebee3bb5f39b374b3283e28cd0            
           replicaCount: 1
           hpa:
             enabled: false
@@ -266,6 +263,7 @@ contextforge:
             PASSWORD_PREVENT_REUSE: "false"
             MIN_PASSWORD_LENGTH: "8"              # minimum password length for validation
             MIN_SECRET_LENGTH: "32"                # minimum secret key length for validation
+            TOKEN_EXPIRY: "1439"
           ingress:
             enabled: false
           pluginConfig:
