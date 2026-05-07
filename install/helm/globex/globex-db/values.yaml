@@ -4,9 +4,9 @@ fullnameOverride: ""
 replicaCount: 1
 
 image:
-  repository: quay.io/cloud-architecture-workshop/globex-store-db
+  repository: quay.io/quarkus_mcp_demo/globex-store-db
   pullPolicy: IfNotPresent
-  tag: 905acd3
+  tag: 08bda6e
 
 podSecurityContext: 
   runAsNonRoot: true
