@@ -3,3 +3,8 @@ name: spiffe
 description: A Helm chart for SPIFFE/SPIRE components
 type: application
 version: 0.1.0
+
+dependencies:
+  - name: ztwim-operator
+    version: 0.1.0
+    repository: file://ztwim-operator
