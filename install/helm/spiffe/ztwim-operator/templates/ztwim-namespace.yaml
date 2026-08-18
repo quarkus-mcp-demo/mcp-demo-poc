@@ -5,3 +5,4 @@ metadata:
   name: {{ include "ztwim-operator.namespace" . }}
   annotations:
     argocd.argoproj.io/sync-wave: "-4"
+The OperatorGroup in the zero-trust-workload-identity-manager Namespace does not support the global installation mode. Select a different installation Namespace that supports this mode.

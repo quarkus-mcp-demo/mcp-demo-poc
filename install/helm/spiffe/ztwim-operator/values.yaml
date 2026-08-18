@@ -1,7 +1,7 @@
 nameOverride: "ztwim"
 fullnameOverride: ""
 
-namespace: "zero-trust-workload-identity-manager"
+namespace: "openshift-operators"
 
 ztwim:
   subscription:
