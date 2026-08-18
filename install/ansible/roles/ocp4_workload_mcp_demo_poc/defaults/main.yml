@@ -237,3 +237,11 @@ ocp4_workload_mcp_demo_poc_app_gitops_repo_path: install/helm/app-of-apps
 ocp4_workload_mcp_demo_poc_app_gitops_minio_root_user: minio
 ocp4_workload_mcp_demo_poc_app_gitops_minio_secret:
   "{{ lookup('ansible.builtin.password', '/tmp/passwordfile-minio', chars=['ascii_letters', 'digits'], length=16) }}"
+
+
+# ------------------------------------------------
+# SPIFFE
+# ------------------------------------------------
+ocp4_workload_mcp_demo_poc_spiffe_trust_domain: globex.com
+ocp4_workload_mcp_demo_poc_spiffe_cluster_name: globex-cluster
+ocp4_workload_mcp_demo_poc_spiffe_oidc_host: spire-oidc

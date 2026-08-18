@@ -1,0 +1,12 @@
+global:
+  jwtIssuer: ""
+
+spire-server:
+  caSubject:
+    commonName: "Globex Demo"
+    organization: "Globex"
+    country: "US"
+
+ztwim:
+  trustDomain: "globex.com"
+  clusterName: "globex-cluster"

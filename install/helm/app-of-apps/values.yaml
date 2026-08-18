@@ -371,4 +371,29 @@ contextforge:
 
   argocd:
     enabled: true
-    syncwave: "2"    
+    syncwave: "2" 
+
+spiffe:
+  enabled: true
+  applicationName: spiffe
+  applicationNamespace: openshift-gitops
+  destinationNamespace: spiffe
+  source:
+    repoUrl: https://github.com/quarkus-mcp-demo/mcp-demo-poc.git
+    targetRevision: main
+    path: install/helm/spiffe
+    helm:
+      values:
+        global:
+          jwtIssuer: ""
+        spire-server:
+          caSubject:
+            commonName: "GLOBEX SPIFFE CA"
+            organization: "GLOBEX"
+            country: "US"
+        ztwim:
+          trustDomain: "globex.com"
+          clusterName: "demo-cluster"
+  argocd:
+    enabled: true
+    syncwave: "1"

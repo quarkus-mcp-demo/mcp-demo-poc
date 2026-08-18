@@ -1,0 +1,22 @@
+apiVersion: operator.openshift.io/v1alpha1
+kind: SpireServer
+metadata:
+  name: cluster
+spec:
+  logLevel: info
+  logFormat: text
+  jwtIssuer: {{ .Values.global.jwtIssuer | quote }}
+  caValidity: 24h
+  defaultX509Validity: 1h
+  defaultJWTValidity: 5m
+  caKeyType: ec-p256
+  caSubject:
+    commonName: {{ index .Values "spire-server" "caSubject" "commonName" | quote }}
+    organization: {{ index .Values "spire-server" "caSubject" "organization" | quote }}
+    country: {{ index .Values "spire-server" "caSubject" "country" | quote }}
+  datastore:
+    databaseType: sqlite3
+    connectionString: "/run/spire/data/datastore.sqlite3"
+  persistence:
+    size: "2Gi"
+    accessMode: ReadWriteOnce

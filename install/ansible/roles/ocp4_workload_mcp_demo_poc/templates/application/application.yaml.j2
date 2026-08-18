@@ -174,6 +174,17 @@ spec:
                         access_key_id: {{ ocp4_workload_mcp_demo_poc_app_gitops_minio_root_user }}
                         secret_access_key: {{ ocp4_workload_mcp_demo_poc_app_gitops_minio_secret }}
 
+        spiffe:
+          enabled: true
+          source:
+            helm:
+              values:
+                global:
+                  jwtIssuer: https://{{ ocp4_workload_mcp_demo_poc_spiffe_oidc_host }}.{{ r_openshift_subdomain }}
+                ztwim:
+                  trustDomain: {{ ocp4_workload_mcp_demo_poc_spiffe_trust_domain }}
+                  clusterName: {{ ocp4_workload_mcp_demo_poc_spiffe_cluster_name }}
+
         contextforge:
           enabled: true
           source:

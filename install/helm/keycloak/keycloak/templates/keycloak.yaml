@@ -29,3 +29,7 @@ spec:
     hostname: {{ include "keycloak.hostname" . }}
     strict: false
     adminUrl: https://{{ include "keycloak.hostname" . }}
+  features:
+    enabled:
+      - client-auth-federated
+      - spiffe
