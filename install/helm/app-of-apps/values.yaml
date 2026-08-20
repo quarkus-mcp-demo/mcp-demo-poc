@@ -126,7 +126,7 @@ globex:
           spiffe:
             trustDomain: globex.com
             clusterName: globex-cluster
-            oidcHost: {{ ocp4_workload_mcp_demo_poc_spiffe_oidc_host }}
+            oidcHost: spire-oidc
         globex-web:
           sso:
             authServer:
