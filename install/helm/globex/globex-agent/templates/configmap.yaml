@@ -4,7 +4,7 @@ metadata:
   name: spiffe-workload-agent-spiffe-helper
 data:
   helper.conf: |-
-    agent_address = "/spiffe-workload-api/spire-agent.sock"
+    agent_address = "/spiffe-workload-agent/spire-agent.sock"
     cmd = ""
     cmd_args = ""
     cert_dir = "/svids"
