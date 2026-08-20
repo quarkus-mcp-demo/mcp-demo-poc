@@ -433,8 +433,8 @@ spec:
       requiredActions: []
       federatedIdentities:
       - identityProvider: {{ $.Values.spiffe.providerId }}
-        userId: {{ $.Values.clients.agentSpiffe.spiffeId }}
-        userName: {{ $.Values.clients.agentSpiffe.spiffeId }}
+        userId: "{{ $.Values.clients.agentSpiffe.spiffeId }}"
+        userName: "{{ $.Values.clients.agentSpiffe.spiffeId }}"
       realmRoles:
       - default-roles-{{ $.Values.realm.name }}
       notBefore: 0
@@ -662,7 +662,7 @@ spec:
       enabled: true
       alwaysDisplayInConsole: false
       clientAuthenticatorType: client-secret
-      secret: {{ $.Values.clients.complaintsClient.secret }}
+      secret: "{{ $.Values.clients.complaintsClient.secret }}"
       redirectUris:
       - "/*"
       webOrigins:
@@ -715,7 +715,7 @@ spec:
       enabled: true
       alwaysDisplayInConsole: false
       clientAuthenticatorType: federated-jwt
-      secret: {{ $.Values.clients.agentSpiffe.secret }}
+      secret: "{{ $.Values.clients.agentSpiffe.secret }}"
       redirectUris:
       - "/*"
       webOrigins:
@@ -731,7 +731,7 @@ spec:
       frontchannelLogout: true
       protocol: openid-connect
       attributes:
-        jwt.credential.sub: {{ $.Values.clients.agentSpiffe.spiffeId }}
+        jwt.credential.sub: "{{ $.Values.clients.agentSpiffe.spiffeId }}"
         standard.token.exchange.enabled: 'true'
         frontchannel.logout.session.required: 'true'
         oauth2.device.authorization.grant.enabled: 'false'
@@ -783,7 +783,7 @@ spec:
       enabled: true
       alwaysDisplayInConsole: false
       clientAuthenticatorType: client-secret
-      secret: {{ $.Values.clients.mcpClient.secret }}
+      secret: "{{ $.Values.clients.mcpClient.secret }}"
       redirectUris:
       - "/*"
       webOrigins:
@@ -837,7 +837,7 @@ spec:
       enabled: true
       alwaysDisplayInConsole: false
       clientAuthenticatorType: client-secret
-      secret: {{ $.Values.clients.mcpServer.secret }}
+      secret: "{{ $.Values.clients.mcpServer.secret }}"
       redirectUris:
       - "*"
       webOrigins: []
@@ -889,7 +889,7 @@ spec:
       enabled: true
       alwaysDisplayInConsole: false
       clientAuthenticatorType: client-secret
-      secret: {{ $.Values.clients.mcpService.secret }}
+      secret: "{{ $.Values.clients.mcpService.secret }}"
       redirectUris:
       - "/*"
       webOrigins:
@@ -1636,7 +1636,7 @@ spec:
       config:
         allowCreate: 'true'
         trustDomain: "spiffe://{{ $.Values.spiffe.trustDomain }}"
-        bundleEndpoint: {{ $.Values.spiffe.bundleEndpoint }}
+        bundleEndpoint: "{{ $.Values.spiffe.bundleEndpoint }}"
       types:
       - CLIENT_ASSERTION
     identityProviderMappers: []

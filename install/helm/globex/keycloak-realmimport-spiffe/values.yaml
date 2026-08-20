@@ -4,7 +4,7 @@ keycloak:
   name: keycloak
 
 realm:
-  name: spiffe
+  name: spiffe1
 
 hook:
   image:
@@ -46,7 +46,7 @@ clients:
 
 spiffe:
   enabled: true
-  trustDomain:
+  trustDomain: globex.com
   bundleEndpoint:
   providerId: spiffe
 
