@@ -89,9 +89,6 @@ spec:
           resources:
             {{- toYaml . | nindent 12 }}
           {{- end }}
-          volumeMounts:
-            - name: svids
-              mountPath: /svids          
           env:
             - name: POSTGRESQL_USERNAME
               valueFrom:
@@ -119,6 +116,8 @@ spec:
             - name: QUARKUS_DATASOURCE_JDBC_URL
               value: jdbc:postgresql://${POSTGRESQL_HOST}:${POSTGRESQL_PORT}/${POSTGRESQL_DATABASE}
           volumeMounts:
+            - name: svids
+              mountPath: /svids
             - mountPath: /deployments/config
               name: config
           {{- with .Values.volumeMounts }}
