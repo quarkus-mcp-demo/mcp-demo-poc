@@ -184,7 +184,7 @@ ocp4_workload_mcp_demo_poc_order_llm_base_url: "{{ order_llm_base_url }}"
 # ------------------------------------------------
 # Globex Agent OIDC Setup to call MCP and Complaints service:
 # ------------------------------------------------
-ocp_workload_mcp_demo_internal_oidc_realm: internal
+ocp_workload_mcp_demo_internal_oidc_realm: spiffe
 ocp_workload_mcp_demo_agent_oidc_complaints_client_id: globex-agent-complaints-client
 ocp_workload_mcp_demo_agent_oidc_complaints_client_secret:
   "{{ lookup('ansible.builtin.password', '/tmp/passwordfile-complaints-client-secret', chars=['ascii_letters', 'digits'], length=16) }}"
