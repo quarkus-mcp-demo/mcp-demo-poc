@@ -1,10 +1,10 @@
 ---
 
-# - name: User workload monitoring
-#   ansible.builtin.include_tasks: user_workload_monitoring.yml
+- name: User workload monitoring
+  ansible.builtin.include_tasks: user_workload_monitoring.yml
 
-# - name: Install OpenShift Gitops
-#   ansible.builtin.include_tasks: openshift_gitops.yml
+- name: Install OpenShift Gitops
+  ansible.builtin.include_tasks: openshift_gitops.yml
 
 - name: Install Mcp Demo Poc app
   ansible.builtin.include_tasks: application.yml
