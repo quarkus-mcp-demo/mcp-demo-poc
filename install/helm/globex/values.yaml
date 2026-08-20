@@ -8,6 +8,11 @@ keycloak-realmimport-globex:
     enabled: true
     syncwave: "-2"
 
+keycloak-realmimport-spiffe:
+  argocd:
+    enabled: true
+    syncwave: "-2"
+
 kafka-broker:
   argocd:
     enabled: true

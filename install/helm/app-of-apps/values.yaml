@@ -127,6 +127,15 @@ globex:
             trustDomain: globex.com
             clusterName: globex-cluster
             oidcHost: spire-oidc
+        keycloak-realmimport-spiffe:
+          namespace: keycloak
+          keycloak:
+            name: keycloak
+          realm:
+            name: spiffe
+          spiffe:
+            trustDomain:
+            bundleEndpoint:
         globex-web:
           sso:
             authServer:
@@ -147,8 +156,10 @@ globex:
             realm: globex
             clientId: globex-web-gateway
             internal:
-              authServerUrl: https://sso.apps.mcp2.ocp.sandbox3768.opentlc.com
+              authServerUrl:
               realm: spiffe
+          spiffe:
+            oidcIssuer:
           mcp:
             globexStore:
               url: http://globex-store-mcp:8080/mcp

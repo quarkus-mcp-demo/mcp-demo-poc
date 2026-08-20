@@ -113,6 +113,12 @@ spec:
                       globexStore:
                         clientId: {{ ocp_workload_mcp_demo_globex_mcp_client_clientid }}
                         clientSecret: {{ ocp_workload_mcp_demo_globex_mcp_client_clientsecret }}
+                  spiffe:
+                    trustDomain: {{ ocp4_workload_mcp_demo_poc_spiffe_trust_domain }}
+                    namespace: {{ ocp4_workload_mcp_demo_poc_spiffe_globex_namespace }}
+                    serviceAccount: {{ ocp4_workload_mcp_demo_poc_spiffe_globex_agent_sa }}
+                    clientId: {{ ocp_workload_mcp_demo_globex_agent_spiffe_clientid }}
+                    oidcIssuer: https://{{ ocp4_workload_mcp_demo_poc_spiffe_oidc_host }}.{{ r_openshift_subdomain }}
                   route:
                     host: {{ ocp4_workload_mcp_demo_poc_globex_agent_host }}.{{ r_openshift_subdomain }}
                 keycloak-realmimport-globex:
@@ -144,6 +150,28 @@ spec:
                     agentSpiffe:
                       id: {{ ocp_workload_mcp_demo_globex_agent_spiffe_clientid }}
                       scope: {{ ocp_workload_mcp_demo_globex_agent_spiffe_clientscope }}
+                keycloak-realmimport-spiffe:
+                  spiffe:
+                    trustDomain: {{ ocp4_workload_mcp_demo_poc_spiffe_trust_domain }}
+                    bundleEndpoint: "https://{{ ocp4_workload_mcp_demo_poc_spiffe_oidc_host }}.{{ r_openshift_subdomain }}/keys"
+                  clients:
+                    complaintsClient:
+                      id: {{ ocp_workload_mcp_demo_agent_oidc_complaints_client_id }}
+                      secret: {{ ocp_workload_mcp_demo_agent_oidc_complaints_client_secret }}
+                    mcpClient:
+                      id: {{ ocp_workload_mcp_demo_globex_mcp_client_clientid }}
+                      secret: {{ ocp_workload_mcp_demo_globex_mcp_client_clientsecret }}
+                    mcpServer:
+                      id: {{ ocp_workload_mcp_demo_globex_mcp_server_clientid }}
+                      secret: {{ ocp_workload_mcp_demo_globex_mcp_server_clientsecret }}
+                      scope: {{ ocp_workload_mcp_demo_globex_mcp_server_clientscope }}
+                    mcpService:
+                      id: {{ ocp_workload_mcp_demo_globex_mcp_service_clientid }}
+                      secret: {{ ocp_workload_mcp_demo_globex_mcp_service_clientsecret }}
+                    agentSpiffe:
+                      id: {{ ocp_workload_mcp_demo_globex_agent_spiffe_clientid }}
+                      secret: {{ ocp_workload_mcp_demo_globex_agent_spiffe_clientsecret }}
+                      spiffeId: "spiffe://{{ ocp4_workload_mcp_demo_poc_spiffe_trust_domain }}/ns/{{ ocp4_workload_mcp_demo_poc_spiffe_globex_namespace }}/sa/{{ ocp4_workload_mcp_demo_poc_spiffe_globex_agent_sa }}"
         minio:
           enabled: true
           source:

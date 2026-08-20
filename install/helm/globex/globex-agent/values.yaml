@@ -9,7 +9,7 @@ replicaCount: 1
 image:
   repository: quay.io/quarkus_mcp_demo/globex-agent
   # This sets the pull policy for images.
-  pullPolicy: IfNotPresent
+  pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
   tag: "spiffe"
 
@@ -164,11 +164,11 @@ otel:
 
 
 spiffe:
-  trustDomain: globex.com
-  namespace: globex
-  serviceAccount: globex-agent
-  clientId: globex-agent-spiffe
-  oidcIssuer: https://spire-oidc.apps.mcp2.ocp.sandbox3768.opentlc.com
+  trustDomain:
+  namespace:
+  serviceAccount:
+  clientId:
+  oidcIssuer:
   tokenPath: /svids/jwt.token
 
 spiffeHelper:
