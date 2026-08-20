@@ -124,8 +124,8 @@ globex:
             gateway:
               name: globex-web-gateway
           spiffe:
-            trustDomain: {{ ocp4_workload_mcp_demo_poc_spiffe_trust_domain }}
-            clusterName: {{ ocp4_workload_mcp_demo_poc_spiffe_cluster_name }}
+            trustDomain: globex.com
+            clusterName: globex-cluster
             oidcHost: {{ ocp4_workload_mcp_demo_poc_spiffe_oidc_host }}
         globex-web:
           sso:
