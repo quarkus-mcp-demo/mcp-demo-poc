@@ -120,6 +120,11 @@ spec:
                     gateway: 
                       secret: {{ ocp4_workload_mcp_demo_poc_rhbk_client_gateway_secret }}
                 keycloak-realmimport-internal:
+                  spiffe:
+                    trustDomain: {{ ocp4_workload_mcp_demo_poc_spiffe_trust_domain }}
+                    clusterName: {{ ocp4_workload_mcp_demo_poc_spiffe_cluster_name }}
+                    oidcHost: {{ ocp4_workload_mcp_demo_poc_spiffe_oidc_host }}
+                    bundleEndpoint: "https://{{ ocp4_workload_mcp_demo_poc_spiffe_oidc_host }}.{{ r_openshift_subdomain }}/keys"
                   clients:
                     complaintsClient:
                       id: {{ ocp_workload_mcp_demo_agent_oidc_complaints_client_id }}
@@ -136,6 +141,9 @@ spec:
                       id: {{ ocp_workload_mcp_demo_globex_mcp_service_clientid }}
                       secret: {{ ocp_workload_mcp_demo_globex_mcp_service_clientsecret }}
                       scope: {{ ocp_workload_mcp_demo_globex_mcp_service_clientscope }}
+                    agentSpiffe:
+                      id: {{ ocp_workload_mcp_demo_globex_agent_spiffe_clientid }}
+                      scope: {{ ocp_workload_mcp_demo_globex_agent_spiffe_clientscope }}
         minio:
           enabled: true
           source:

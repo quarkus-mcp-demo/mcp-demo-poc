@@ -161,3 +161,7 @@ cors:
 otel:
   exporter:
     endpoint:
+
+
+spiffeHelper:
+  image: registry.redhat.io/zero-trust-workload-identity-manager/spiffe-helper-rhel9:v0.10.0

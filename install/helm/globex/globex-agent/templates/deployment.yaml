@@ -25,11 +25,47 @@ spec:
         {{- end }}
     spec:
       serviceAccountName: {{ include "globex-agent.serviceAccountName" . }}
+      terminationGracePeriodSeconds: 30
       {{- with .Values.podSecurityContext }}
       securityContext:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      initContainers:
+        - name: init-spiffe-helper
+          image: {{ .Values.spiffeHelper.image }}
+          imagePullPolicy: IfNotPresent
+          args:
+            - '-config'
+            - /etc/helper.conf
+            - '-daemon-mode=false'
+          volumeMounts:
+            - name: spiffe-helper-config
+              readOnly: true
+              mountPath: /etc/helper.conf
+              subPath: helper.conf
+            - name: spiffe-workload-agent
+              readOnly: true
+              mountPath: /spiffe-workload-agent
+            - name: svids
+              mountPath: /svids
       containers:
+        - name: spiffe-helper
+          image: {{ .Values.spiffeHelper.image }}
+          imagePullPolicy: IfNotPresent
+          args:
+            - '-config'
+            - /etc/helper.conf
+          resources: {}
+          volumeMounts:
+            - name: spiffe-helper-config
+              readOnly: true
+              mountPath: /etc/helper.conf
+              subPath: helper.conf
+            - name: spiffe-workload-agent
+              readOnly: true
+              mountPath: /spiffe-workload-agent
+            - name: svids
+              mountPath: /svids      
         - name: {{ .Chart.Name }}
           {{- with .Values.securityContext }}
           securityContext:
@@ -53,6 +89,9 @@ spec:
           resources:
             {{- toYaml . | nindent 12 }}
           {{- end }}
+          volumeMounts:
+            - name: svids
+              mountPath: /svids          
           env:
             - name: POSTGRESQL_USERNAME
               valueFrom:
@@ -86,6 +125,16 @@ spec:
             {{- toYaml . | nindent 12 }}
           {{- end }}
       volumes:
+        - name: spiffe-helper-config
+          configMap:
+            name: spiffe-workload-agent-spiffe-helper
+            defaultMode: 420
+        - name: svids
+          emptyDir: {}
+        - name: spiffe-workload-agent
+          csi:
+            driver: csi.spiffe.io
+            readOnly: true
         - name: config
           secret:
             secretName: {{ include "globex-agent.name" . }}
