@@ -245,3 +245,9 @@ ocp4_workload_mcp_demo_poc_app_gitops_minio_secret:
 ocp4_workload_mcp_demo_poc_spiffe_trust_domain: globex.com
 ocp4_workload_mcp_demo_poc_spiffe_cluster_name: globex-cluster
 ocp4_workload_mcp_demo_poc_spiffe_oidc_host: spire-oidc
+
+# ------------------------------------------------
+# SPIFFE Setup for Globex Agent OIDC Setup to call MCP service:
+# ------------------------------------------------
+ocp_workload_mcp_demo_globex_agent_spiffe_clientid: globex-mcp-spiffe
+ocp_workload_mcp_demo_globex_agent_spiffe_clientscope: globex-mcp-spiffe-scope

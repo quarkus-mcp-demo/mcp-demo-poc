@@ -41,7 +41,18 @@ clients:
     id:
     secret:
     scope:
+  agentSpiffe:
+    id: 
+    secret:
+    scope:
 
+spiffe:
+  enabled: true
+  trustDomain: globex.com
+  clusterName: globex-cluster
+  bundleEndpoint: 
+  oidcHost: spire-oidc
+  providerId: spiffe
 
 groups: []
 

@@ -4,6 +4,7 @@
 {{- $clientRealmManagementContainerId := printf "%s" (uuidv4 | toString) }}
 {{- $clientBrokerContainerId := printf "%s" (uuidv4 | toString) }}
 {{- $accountContainerId := printf "%s" (uuidv4 | toString) }}
+{{- $spiffeId := printf "%s" (uuidv4 | toString) }}
 ---
 apiVersion: k8s.keycloak.org/v2alpha1
 kind: KeycloakRealmImport
@@ -282,6 +283,7 @@ spec:
           attributes: {}
         {{ $.Values.clients.mcpService.id }}: []
         {{ $.Values.clients.complaintsClient.id }}: []
+        {{ $.Values.clients.agentSpiffeClient.id }}: []
         security-admin-console: []
         admin-cli: []
         account-console: []
@@ -1572,7 +1574,22 @@ spec:
     enabledEventTypes: []
     adminEventsEnabled: false
     adminEventsDetailsEnabled: false
-    identityProviders: []
+    identityProviders: [
+      {
+        "alias": {{ $.Values.spiffe.providerId | quote }},
+        "internalId": "{{ $spiffeId }}",
+        "providerId":{{ $.Values.spiffe.providerId | quote }},
+        "enabled": true,
+        "config": {
+          "allowCreate": "true",
+          "trustDomain": {{ $.Values.spiffe.trustDomain | quote }},
+          "bundleEndpoint": {{ $.Values.spiffe.bundleEndpoint | quote }}
+        },
+        "types": [
+          "CLIENT_ASSERTION"
+        ]
+      }
+    ]
     identityProviderMappers: []
     components:
       org.keycloak.services.clientregistration.policy.ClientRegistrationPolicy:
