@@ -146,6 +146,9 @@ globex:
           oidc:
             realm: globex
             clientId: globex-web-gateway
+            internal:
+              authServerUrl: https://sso.apps.mcp2.ocp.sandbox3768.opentlc.com
+              realm: spiffe
           mcp:
             globexStore:
               url: http://globex-store-mcp:8080/mcp
