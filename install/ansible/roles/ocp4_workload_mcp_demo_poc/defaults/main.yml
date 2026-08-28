@@ -255,3 +255,12 @@ ocp_workload_mcp_demo_globex_agent_spiffe_clientid: globex-mcp-spiffe
 ocp_workload_mcp_demo_globex_agent_spiffe_clientsecret:
   "{{ lookup('ansible.builtin.password', '/tmp/passwordfile-globex-agent-spiffe-clientsecret', chars=['ascii_letters', 'digits'], length=16) }}"
 ocp_workload_mcp_demo_globex_agent_spiffe_clientscope: globex-mcp-spiffe-scope
+
+# ------------------------------------------------
+#  Watsonx.ai AI API Params
+# ------------------------------------------------
+ocp4_workload_mcp_demo_poc_app_watsonx_region: https://us-south.ml.cloud.ibm.com
+ocp4_workload_mcp_demo_poc_app_watsonx_model_name: granite-4-h-small
+ocp4_workload_mcp_demo_poc_app_watsonx_space_id: replaceme
+ocp4_workload_mcp_demo_poc_app_watsonx_api_key: replaceme
+ocp4_workload_mcp_demo_poc_app_watsonx_base_url: replaceme

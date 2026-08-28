@@ -235,5 +235,9 @@ spec:
                     AUTH_ENCRYPTION_SECRET: {{ ocp4_workload_mcp_demo_poc_context_forge_auth_encryption_secret }}
                 route:
                   host: {{ ocp4_workload_mcp_demo_poc_context_forge_host }}.{{ r_openshift_subdomain }}
-
-
+        watsonx:
+          region: {{ ocp4_workload_mcp_demo_poc_app_watsonx_region }}
+          spaceId: {{ ocp4_workload_mcp_demo_poc_app_watsonx_space_id }}
+          modelName: {{ ocp4_workload_mcp_demo_poc_app_watsonx_model_name }}
+          apiKey: {{ ocp4_workload_mcp_demo_poc_app_watsonx_api_key }}
+          baseUrl: {{ ocp4_workload_mcp_demo_poc_app_watsonx_base_url }}

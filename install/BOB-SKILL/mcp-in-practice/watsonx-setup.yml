@@ -1,0 +1,159 @@
+# watsonx-setup.yml
+# ---------------------------------------------------------------------------
+# Provision a watsonx.ai deployment space usable by a Quarkus app, using ONLY
+# a service ID's API key as input. Everything else is auto-discovered.
+#
+# A service ID can't create a watsonx.ai *project* (creator must be a user),
+# but it CAN create a *deployment space* — which works the same for inference.
+# Quarkus then uses space-id (not project-id).
+#
+# The identity that owns the API key becomes the space creator/admin, so that
+# same key is what Quarkus authenticates with — no extra service IDs needed.
+#
+# Pure REST (no ibmcloud CLI, no Terraform, no collections).
+#
+#   export IC_API_KEY="<YOUR_SERVICE_ID_API_KEY>"
+#   ansible-playbook watsonx-setup.yml
+#
+# Optional overrides:  -e space_name=... -e model_id=... -e region=...
+# ---------------------------------------------------------------------------
+- name: Provision watsonx.ai deployment space for Quarkus (API key only)
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  vars:
+    ibmcloud_api_key: "{{ lookup('env', 'IC_API_KEY') }}"
+    space_name: quarkus-watsonx-space
+    model_id: meta-llama/llama-3-3-70b-instruct
+    # region: auto-derived from the WML instance CRN unless overridden here
+    rc_api: https://resource-controller.cloud.ibm.com/v2
+    dp_api: https://api.dataplatform.cloud.ibm.com
+    # Global catalog resource ids (identical in every IBM Cloud account):
+    cos_resource_id: dff97f5c-bc5e-4455-b470-411c3edbe49c   # Cloud Object Storage
+    wml_resource_id: 51c53b72-918f-4869-b834-2d99eb28422a   # Watson Machine Learning (pm-20)
+
+  tasks:
+    - name: Require the API key
+      ansible.builtin.assert:
+        that: ibmcloud_api_key | length > 0
+        fail_msg: "Export it first:  export IC_API_KEY=\"<your-service-id-api-key>\""
+
+    - name: Get an IAM access token from the API key
+      ansible.builtin.uri:
+        url: https://iam.cloud.ibm.com/identity/token
+        method: POST
+        headers: { Content-Type: application/x-www-form-urlencoded }
+        body_format: form-urlencoded
+        body:
+          grant_type: urn:ibm:params:oauth:grant-type:apikey
+          apikey: "{{ ibmcloud_api_key }}"
+      register: iam
+    - set_fact:
+        token: "Bearer {{ iam.json.access_token }}"
+
+    # ---- Discover COS + WML instances the key can see (any resource group) ----
+    - name: Find the Cloud Object Storage instance
+      ansible.builtin.uri:
+        url: "{{ rc_api }}/resource_instances?resource_id={{ cos_resource_id }}&limit=100"
+        headers: { Authorization: "{{ token }}" }
+      register: cos_rc
+
+    - name: Find the Watson Machine Learning (pm-20) instance
+      ansible.builtin.uri:
+        url: "{{ rc_api }}/resource_instances?resource_id={{ wml_resource_id }}&limit=100"
+        headers: { Authorization: "{{ token }}" }
+      register: wml_rc
+
+    - set_fact:
+        cos: "{{ (cos_rc.json.resources | first) | default(none) }}"
+        wml: "{{ (wml_rc.json.resources | first) | default(none) }}"
+
+    - name: Ensure COS and WML instances were found
+      ansible.builtin.assert:
+        that:
+          - cos is not none
+          - wml is not none
+        fail_msg: >-
+          Could not find a Cloud Object Storage and/or Watson Machine Learning (pm-20)
+          instance this key can access. Create them (or grant access) first.
+
+    - name: Derive region from the WML instance CRN
+      set_fact:
+        region: "{{ region | default(wml.crn.split(':')[5]) }}"
+
+    - name: Show what was discovered
+      ansible.builtin.debug:
+        msg:
+          - "region : {{ region }}"
+          - "COS    : {{ cos.name }}"
+          - "WML    : {{ wml.name }}"
+
+    # ---- Create the deployment space (reuse if same name already exists) ----
+    - name: List existing spaces
+      ansible.builtin.uri:
+        url: "{{ dp_api }}/v2/spaces?limit=100"
+        headers: { Authorization: "{{ token }}" }
+      register: spaces_list
+
+    - set_fact:
+        existing_space: "{{ (spaces_list.json.resources | selectattr('entity.name', 'equalto', space_name) | list | first) | default(none) }}"
+
+    - name: Create deployment space
+      ansible.builtin.uri:
+        url: "{{ dp_api }}/v2/spaces"
+        method: POST
+        headers: { Authorization: "{{ token }}", Content-Type: application/json }
+        body_format: json
+        status_code: [200, 201, 202]
+        body:
+          name: "{{ space_name }}"
+          description: watsonx.ai space for the Quarkus app
+          storage:
+            type: bmcos_object_storage
+            resource_crn: "{{ cos.crn }}"
+          compute:
+            - name: "{{ wml.name }}"
+              type: machine_learning
+              crn: "{{ wml.crn }}"
+      register: space_create
+      when: existing_space is none
+
+    - set_fact:
+        space_id: "{{ existing_space.metadata.id if existing_space is not none else space_create.json.metadata.id }}"
+
+    - name: Wait for the space to become active
+      ansible.builtin.uri:
+        url: "{{ dp_api }}/v2/spaces/{{ space_id }}"
+        headers: { Authorization: "{{ token }}" }
+      register: space_state
+      until: space_state.json.entity.status.state == 'active'
+      retries: 24
+      delay: 5
+
+    # ---- Sanity-check inference through the space with this key ----
+    - name: Smoke-test inference
+      ansible.builtin.uri:
+        url: "https://{{ region }}.ml.cloud.ibm.com/ml/v1/text/chat?version=2024-05-01"
+        method: POST
+        headers: { Authorization: "{{ token }}", Content-Type: application/json }
+        body_format: json
+        status_code: [200]
+        body:
+          space_id: "{{ space_id }}"
+          model_id: "{{ model_id }}"
+          messages:
+            - { role: user, content: "Reply with exactly: OK" }
+          max_tokens: 10
+      register: smoke
+      failed_when: false
+
+    # ---- Output for Quarkus ----
+    - name: Quarkus config
+      ansible.builtin.debug:
+        msg:
+          - "# smoke test: {{ 'PASS -> ' + smoke.json.choices[0].message.content if (smoke.status == 200) else 'skipped/failed (space still usable; check model_id)' }}"
+          - "quarkus.langchain4j.watsonx.base-url=https://{{ region }}.ml.cloud.ibm.com"
+          - "quarkus.langchain4j.watsonx.space-id={{ space_id }}"
+          - "quarkus.langchain4j.watsonx.api-key={{ ibmcloud_api_key }}"
+          - "quarkus.langchain4j.watsonx.chat-model.model-id={{ model_id }}"
