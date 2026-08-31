@@ -10,3 +10,10 @@ spire-server:
 ztwim:
   trustDomain: "globex.com"
   clusterName: "globex-cluster"
+  subscription:
+    channel: stable-v1
+
+
+argocd:
+  enabled: true
+  syncwave: "-3"

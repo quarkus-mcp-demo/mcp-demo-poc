@@ -1,0 +1,34 @@
+kind: Project
+apiVersion: project.openshift.io/v1
+metadata:
+  name: "zero-trust-workload-identity-manager"
+  displayname: "Zero Trust Workload Identity Manager"
+  annotations:
+    {{- include "ztwim.argocd-syncwave" . | nindent 4 }}
+---
+
+apiVersion: operators.coreos.com/v1
+kind: OperatorGroup
+metadata:
+  name: openshift-zero-trust-workload-identity-manager
+  namespace: zero-trust-workload-identity-manager
+  annotations:
+    {{- include "ztwim.argocd-syncwave" . | nindent 4 }}
+spec:
+  upgradeStrategy: Default
+
+---
+
+apiVersion: operators.coreos.com/v1alpha1
+kind: Subscription
+metadata:
+  name: openshift-zero-trust-workload-identity-manager
+  namespace: zero-trust-workload-identity-manager
+  annotations:
+    {{- include "ztwim.argocd-syncwave" . | nindent 4 }}  
+spec:
+  channel: {{ .Values.ztwim.subscription.channel }}
+  name: openshift-zero-trust-workload-identity-manager
+  source: redhat-operators
+  sourceNamespace: openshift-marketplace
+  installPlanApproval: Automatic
